@@ -8,12 +8,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 
-import com.gagym.mvc.EyebodyDTO;
 import com.gagym.mvc.dao.IMypageMainDAO;
-import com.gagym.mvc.InbodyDTO;
-import com.gagym.mvc.MemberDTO;
+import com.gagym.mvc.PointDTO;
 
-public class MypageMainController implements Controller
+public class PayRefundController implements Controller
 {
 	private IMypageMainDAO dao;
 	
@@ -31,24 +29,18 @@ public class MypageMainController implements Controller
 		
 		String memNo = request.getParameter("memNo");
 		
-		MemberDTO member = new MemberDTO();
-		ArrayList<InbodyDTO> inbodyList = new ArrayList<InbodyDTO>();
-		ArrayList<EyebodyDTO> eyebodyList = new ArrayList<EyebodyDTO>();
-		int havepoint = 0;
+		ArrayList<PointDTO> pointList = new ArrayList<PointDTO>();
+		int havePoint = 0;
 		
 		try
 		{
-				member = dao.privacyList(memNo);
-				inbodyList = dao.inbodyList(memNo);
-				eyebodyList = dao.eyebodyList(memNo);
-				havepoint = dao.havePoint(memNo);
+				pointList = dao.pointList(memNo);
+				havePoint = dao.havePoint(memNo);
 				
-				mav.addObject("member", member);
-				mav.addObject("inbodyList", inbodyList);
-				mav.addObject("eyebodyList", eyebodyList);
-				mav.addObject("havepoint", havepoint);
+				mav.addObject("pointList", pointList);
+				mav.addObject("havePoint", havePoint);
 				
-				mav.setViewName("/WEB-INF/view/MypageMain.jsp");
+				mav.setViewName("/WEB-INF/view/PayRefund.jsp");
 			
 			
 		} catch (Exception e)

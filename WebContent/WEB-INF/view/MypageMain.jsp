@@ -133,11 +133,26 @@ html ul.tab li.active, html ul.tab li.active a:hover {
 	});
 </script>
 
+<script type="text/javascript">
+	
+	$(function()
+	{ 
+		// 인바디 삭제 버튼 클릭
+		$("#inbodyDelete").click(function()
+		{
+			if(confirm("현재 선택한 데이터를 정말 삭제하시겠습니까?"))
+	         {				
+	            $(location).attr("href", "inbodydelete.action?inbodyNo=" + $(this).val() + "&memNo=" + $("#memNo").val());
+	         }
+		});
+	});
+	
+</script>
+
 </head>
 <body>
 	<div id="outer">
 		<div id="inner">
-			<form>
 				<div class="container">
 
 					<div class="row">
@@ -147,8 +162,8 @@ html ul.tab li.active, html ul.tab li.active a:hover {
 						</div>
 						<div class="col-md-4">
 							<span class="col-md-3" style="padding-top: 5px;">잔여아령</span>
-							<input type="text" id="name" name="name" disabled="disabled"
-								class="form-control col-md-2"  value="0" />
+							<input type="text" id="name" name="name" disabled="disabled" value="${havepoint }"
+								class="form-control col-md-2" style="width:80px; text-align:right;" />
 						</div>
 
 					</div>
@@ -190,7 +205,7 @@ html ul.tab li.active, html ul.tab li.active a:hover {
 							value="${member.addr } ${member.detailAddr }" />
 						<div class="col-md-4" style="text-align: center;">
 							<button type="button" class="btn btn-default"
-								value="${member.memNo }">프로필 수정</button>
+								value="${member.memNo }" onclick="location.href='privacyupdateform.action?memNo=${param.memNo}'">프로필 수정</button>
 						</div>
 					</div>
 					<br> <br>
@@ -198,7 +213,7 @@ html ul.tab li.active, html ul.tab li.active a:hover {
 					<div class="row">
 						<button type="button" class="btn btn-default col-md-3">알림</button>
 						<button type="button" class="btn btn-default col-md-3">강사신청</button>
-						<button type="button" class="btn btn-default col-md-3">결제환불내역</button>
+						<button type="button" class="btn btn-default col-md-3" onclick="location.href='payrefund.action?memNo=${param.memNo}'">결제환불내역</button>
 						<button type="button" class="btn btn-default col-md-3" onclick="location.href='withdrawalform.action?memNo=${param.memNo}'">회원탈퇴</button>
 					</div>
 				</div>
@@ -241,8 +256,7 @@ html ul.tab li.active, html ul.tab li.active a:hover {
 											<td>${inbody.bodyfatPer }</td>
 											<td>${inbody.bmi }</td>
 											<td>
-												<button type="button" class="btn btn-default btnDelete"
-												 value="${member.memNo }">삭제</button>
+												<button type="button" id="inbodyDelete" class="btn btn-default btnDelete" value="${inbody.inbodyNo }" >삭제</button>
 											</td>
 										</tr>
 									</c:forEach>
@@ -251,14 +265,21 @@ html ul.tab li.active, html ul.tab li.active a:hover {
 						</div>
 
 						<div id="tab2" class="tab_content">
-							<div style="text-align: right;">
-								<button type="button" class="btn btn-default btnInsert" onclick="location.href='eyebodyinsertform.action?memNo=${param.memNo}'">눈바디 등록</button>
-							</div>
+							<form action="eyebodyinsert.action" method="post" enctype="multipart/form-data">
+								<div class="row">
+									<div class="col-md-7"></div>
+									<div class="col-md-5 row">
+										<input type="hidden" id="memNo" name="memNo" value="${param.memNo }">
+										<input type="file" role="button" class="btn btn-default btnInsert col-md-9" >
+										<input type="submit" value="눈바디 등록" class="col-md-3">
+									</div>
+								</div>
+							</form>
 							
 							<div>
 								<div class="row">
 									<c:forEach var="eyebody" items="${eyebodyList }">
-									<div class="col-4">
+									<div class="col-md-4">
 										<div class="card">
 											<div class="card-header">${eyebody.eyebodyNo }</div>
 											<img src="images/img_01.png" alt="" />
@@ -276,8 +297,6 @@ html ul.tab li.active, html ul.tab li.active a:hover {
 					</div>
 
 				</div>
-
-			</form>
 		</div>
 	</div>
 

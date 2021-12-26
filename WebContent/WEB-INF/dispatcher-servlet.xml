@@ -38,8 +38,13 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 		<property name="dao" ref="mypageMainDAO"></property>
 	</bean>
 	<bean name="/inbodyinsertform.action" class="com.gagym.mvc.controller.InbodyInsertFormController"></bean>
-	
 	<bean name="/inbodyinsert.action" class="com.gagym.mvc.controller.InbodyInsertController">
+		<property name="dao" ref="mypageMainDAO"></property>
+	</bean>
+	<bean name="/inbodydelete.action" class="com.gagym.mvc.controller.InbodyDeleteController">
+		<property name="dao" ref="mypageMainDAO"></property>
+	</bean>
+	<bean name="/eyebodyinsert.action" class="com.gagym.mvc.controller.EyebodyInsertController">
 		<property name="dao" ref="mypageMainDAO"></property>
 	</bean>
 	
@@ -53,6 +58,26 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 	<bean name="/withdrawal.action" class="com.gagym.mvc.controller.WithdrawalController">
 		<property name="dao" ref="mypageMainDAO"></property>
 	</bean>
+	
+	<!-- 회원 정보 수정 관련 Controller 등록 -->
+	<bean name="/privacyupdateform.action" class="com.gagym.mvc.controller.PrivacyUpdateFormController">
+		<property name="dao" ref="mypageMainDAO"></property>
+	</bean>
+	<bean name="/privacyupdate.action" class="com.gagym.mvc.controller.PrivacyUpdateController">
+		<property name="dao" ref="mypageMainDAO"></property>
+	</bean>
+	
+	<!-- 회원 결제 환불내역 관련 Controller 등록 -->
+	<bean name="/payrefund.action" class="com.gagym.mvc.controller.PayRefundController">
+		<property name="dao" ref="mypageMainDAO"></property>
+	</bean>
+	<bean name="/refundform.action" class="com.gagym.mvc.controller.RefundFormController">
+		<property name="dao" ref="mypageMainDAO"></property>
+	</bean>
+	<bean name="/refund.action" class="com.gagym.mvc.controller.RefundController">
+		<property name="dao" ref="mypageMainDAO"></property>
+	</bean>
+	
 	
 	<!-- 메인페이지 연결(나중에 합칠 때 수정) -->
 	<bean name="/mainmenu.action" class="com.gagym.mvc.controller.MainController"></bean>

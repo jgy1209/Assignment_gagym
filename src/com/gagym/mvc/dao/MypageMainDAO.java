@@ -12,6 +12,7 @@ import javax.sql.DataSource;
 import com.gagym.mvc.EyebodyDTO;
 import com.gagym.mvc.InbodyDTO;
 import com.gagym.mvc.MemberDTO;
+import com.gagym.mvc.PointDTO;
 import com.gagym.mvc.dao.IMypageMainDAO;
 
 public class MypageMainDAO implements IMypageMainDAO
@@ -26,7 +27,7 @@ public class MypageMainDAO implements IMypageMainDAO
 	}
 	
 	
-	// 개인정보 리스트
+	// 1-1. 개인정보 리스트
 	@Override
 	public MemberDTO privacyList(String mno) throws SQLException
 	{
@@ -73,7 +74,36 @@ public class MypageMainDAO implements IMypageMainDAO
 
 	}
 	
-	// 인바디 리스트
+	// 1-2. 개인정보 수정
+	@Override
+	public int privacyUpdate(MemberDTO member) throws SQLException
+	{
+		int result = 0;
+		
+		Connection conn = dataSource.getConnection();
+		
+		String sql = "UPDATE PRIVACY" + 
+					 " SET ZIP_CODE=?, ADDR=?, DETAIL_ADDR=?, TEL=?, HOMETEL=?, EMAIL=?" + 
+					 " WHERE MEM_NO=?";
+		
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, member.getZipCode());
+		pstmt.setString(2, member.getAddr());
+		pstmt.setString(3, member.getDetailAddr());
+		pstmt.setString(4, member.getTel());
+		pstmt.setString(5, member.getHometel());
+		pstmt.setString(6, member.getEmail());
+		pstmt.setString(7, member.getMemNo());
+		
+		result = pstmt.executeUpdate();
+		
+		pstmt.close();
+		conn.close();
+		
+		return result;
+	}
+	
+	// 2-1. 인바디 리스트
 	@Override
 	public ArrayList<InbodyDTO> inbodyList(String mno) throws SQLException
 	{
@@ -81,7 +111,7 @@ public class MypageMainDAO implements IMypageMainDAO
 
 		Connection conn = dataSource.getConnection();
 
-		String sql = "SELECT INBODY_NO, INBODY_DATE, WEIGHT, TALL, MUSCLE, BODYFAT, BODYFAT_PER, ROUND(WEIGHT/((TALL/100)*(TALL/100)), 2)"
+		String sql = "SELECT INBODY_NO, TO_CHAR(INBODY_DATE, 'YYYY-MM-DD'), WEIGHT, TALL, MUSCLE, BODYFAT, BODYFAT_PER, ROUND(WEIGHT/((TALL/100)*(TALL/100)), 2)"
 					+ " AS BMI FROM INBODY WHERE MEM_NO=? ORDER BY INBODY_DATE DESC";
 
 		PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -114,7 +144,7 @@ public class MypageMainDAO implements IMypageMainDAO
 
 	}
 	
-	// 인바디 등록
+	// 2-2. 인바디 등록
 	@Override
 	public int inbodyAdd(InbodyDTO inbody) throws SQLException
 	{
@@ -144,7 +174,29 @@ public class MypageMainDAO implements IMypageMainDAO
 		
 	}
 	
-	// 눈바디 리스트
+	// 2-3. 인바디 삭제
+	@Override
+	public int inbodyRemove(String inbodyNo) throws SQLException
+	{
+		int result = 0;
+		
+		Connection conn = dataSource.getConnection();
+		
+		String sql = "DELETE FROM INBODY WHERE INBODY_NO=?";
+		
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, inbodyNo);
+		
+		result = pstmt.executeUpdate();
+		
+		pstmt.close();
+		conn.close();
+		
+		return result;
+		
+	}
+	
+	// 3-1. 눈바디 리스트
 	@Override
 	public ArrayList<EyebodyDTO> eyebodyList(String mno) throws SQLException
 	{
@@ -152,7 +204,7 @@ public class MypageMainDAO implements IMypageMainDAO
 		
 		Connection conn = dataSource.getConnection();
 		
-		String sql = "SELECT EYEBODY_NO, MEM_NO, EYEBODY_DATE, PHOTO_PATH FROM EYEBODY WHERE MEM_NO=? ORDER BY EYEBODY_DATE DESC";
+		String sql = "SELECT EYEBODY_NO, MEM_NO, TO_CHAR(EYEBODY_DATE, 'YYYY-MM-DD'), PHOTO_PATH FROM EYEBODY WHERE MEM_NO=? ORDER BY EYEBODY_DATE DESC";
 		
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		
@@ -180,8 +232,31 @@ public class MypageMainDAO implements IMypageMainDAO
 		
 	}
 	
+	// 3-2. 눈바디 등록
+	@Override
+	public int eyebodyAdd(EyebodyDTO eyebody) throws SQLException
+	{
+		int result = 0;
+		
+		Connection conn = dataSource.getConnection();
+		
+		String sql = "INSERT INTO EYEBODY(EYEBODY_NO, MEM_NO, EYEBODY_DATE, PHOTO_PATH)" 
+					+ "VALUES('EYEBODY-'|| SEQ_EYEBODY.NEXTVAL, ?, SYSDATE, ?)";
+		
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, eyebody.getMemNo());
+		pstmt.setString(2, eyebody.getPhotoPath());
+		
+		result = pstmt.executeUpdate();
+		
+		pstmt.close();
+		conn.close();
+		
+		return result;
+		
+	}
 	
-	// 회원 이름, 아이디
+	// 4-1. 회원 이름, 아이디
 	@Override
 	public MemberDTO getNameId(String mno) throws SQLException
 	{
@@ -213,7 +288,7 @@ public class MypageMainDAO implements IMypageMainDAO
 	}
 	
 	
-	// 비밀번호 일치 여부 (일치하면 1)
+	// 4-2. 비밀번호 일치 여부 (일치하면 1)
 	@Override
 	public int checkPw(String mno, String pw1) throws SQLException
 	{
@@ -253,7 +328,7 @@ public class MypageMainDAO implements IMypageMainDAO
 	}
 	
 	
-	// 탈퇴 체크 1. 강좌 예약 존재 여부 (존재하면 1 - 탈퇴불가)
+	// 4-3. 탈퇴 체크 1. 강좌 예약 존재 여부 (존재하면 1 - 탈퇴불가)
 	@Override
 	public int withdrawCheckClass(String mno) throws SQLException
 	{
@@ -261,7 +336,7 @@ public class MypageMainDAO implements IMypageMainDAO
 		
 		Connection conn = dataSource.getConnection();
 		
-		String sql="SELECT PRC_CODE, CNL_DATE, CLASS_COM_DATE FROM SIGNOUTCHECK1VIEW WHERE MEM_NO =  ?";
+		String sql="SELECT PRC_CODE, CNL_DATE, CLASS_COM_DATE FROM WITHDRAWALCHECK1VIEW WHERE MEM_NO =  ?";
 		
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		
@@ -295,7 +370,7 @@ public class MypageMainDAO implements IMypageMainDAO
 		return result;
 	}
 	
-	// 탈퇴 체크 2. 원데이 예약 존재 여부 (존재하면 1 - 탈퇴불가)
+	// 4-4. 탈퇴 체크 2. 원데이 예약 존재 여부 (존재하면 1 - 탈퇴불가)
 	@Override
 	public int withdrawCheckOneday(String mno) throws SQLException
 	{
@@ -303,7 +378,7 @@ public class MypageMainDAO implements IMypageMainDAO
 		
 		Connection conn = dataSource.getConnection();
 		
-		String sql="SELECT ONEDAY_FIX_NO, ONEDAY_CNL_DATE, ONEDAY_COM_DATE FROM SIGNOUTCHECK2VIEW WHERE MEM_NO = ?";
+		String sql="SELECT ONEDAY_FIX_NO, ONEDAY_CNL_DATE, ONEDAY_COM_DATE FROM WITHDRAWALCHECK2VIEW WHERE MEM_NO = ?";
 		
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		
@@ -337,7 +412,7 @@ public class MypageMainDAO implements IMypageMainDAO
 		return result;
 	}
 
-	// 회원 탈퇴
+	// 4-5. 회원 탈퇴
 	@Override
 	public int withdraw(String mno, String reason, String oth) throws SQLException
 	{
@@ -359,5 +434,150 @@ public class MypageMainDAO implements IMypageMainDAO
 		conn.close();
 		
 		return result;
+	}
+	
+	// 5-1. 아령 결제 환불내역
+	@Override
+	public ArrayList<PointDTO> pointList(String mno) throws SQLException
+	{
+		ArrayList<PointDTO> result = new ArrayList<PointDTO>();
+
+		Connection conn = dataSource.getConnection();
+
+		String sql = "SELECT MEM_NO, PAYDATE" + 
+				", CASE POINT WHEN 50 THEN 60000" + 
+				"             WHEN 100 THEN 110000" + 
+				"             WHEN 300 THEN 320000" + 
+				"             WHEN 500 THEN 530000" + 
+				"  ELSE -1" + 
+				"  END AS POINTPAY" + 
+				", POINT, POINTRE_DATE, NVL(POINTREPAY, 0), POINTPAY_NO" + 
+				", CASE WHEN FN_POINTCHECK(MEM_NO, POINTPAY_NO) > POINT" + 
+				"       THEN 0 " + 
+				"       WHEN FN_POINTCHECK(MEM_NO, POINTPAY_NO) >= 0" + 
+				"       THEN POINT - (FN_POINTSUM(MEM_NO, POINTPAY_NO)-FN_POINTPAY(MEM_NO))" + 
+				"       WHEN FN_POINTCHECK(MEM_NO, POINTPAY_NO) < 0" + 
+				"       THEN POINT" + 
+				"  ELSE -1 END AS USEPOINT" +
+				" FROM POINTVIEW" + 
+				" WHERE MEM_NO = ? ORDER BY PAYDATE";
+
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		
+		pstmt.setString(1, mno);
+
+		ResultSet rs = pstmt.executeQuery();
+
+		while (rs.next())
+		{
+			PointDTO point = new PointDTO();
+			
+			point.setMemNo(rs.getString(1));
+			point.setPayDate(rs.getString(2));
+			point.setPointPay(rs.getInt(3));
+			point.setPoint(rs.getInt(4));
+			point.setPointReDate(rs.getString(5));
+			point.setPointRepay(rs.getInt(6));
+			point.setPointPayNo(rs.getString(7));
+			point.setUsepoint(rs.getInt(8));
+			
+			result.add(point);
+		}
+
+		rs.close();
+		pstmt.close();
+		conn.close();
+
+		return result;
+
+	}
+	
+	// 5-2. 잔여아령
+	@Override
+	public int havePoint(String mno) throws SQLException
+	{
+		int result = 0;
+
+		Connection conn = dataSource.getConnection();
+
+		String sql = "SELECT SUM(POINT)-FN_POINTPAY(?) AS HAVEPOINT" + 
+					 " FROM POINTPAY P LEFT JOIN POINTRE PR" + 
+					 " ON P.POINTPAY_NO = PR.POINTPAY_NO" + 
+					 " WHERE P.MEM_NO = ?" + 
+					 " AND PR.POINTRE_NO IS NULL";
+
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		
+		pstmt.setString(1, mno);
+		pstmt.setString(2, mno);
+
+		ResultSet rs = pstmt.executeQuery();
+
+		while (rs.next())
+		{
+			result = rs.getInt(1);
+		}
+
+		rs.close();
+		pstmt.close();
+		conn.close();
+
+		return result;
+
+	}
+	
+	// 5-3. 환불 100%여부(결제당일 여부) (존재하면 1 - 100% 가능)
+	@Override
+	public int refundCheck(String pno) throws SQLException
+	{
+		int result = 0;		
+		
+		Connection conn = dataSource.getConnection();
+		
+		String sql="SELECT CASE WHEN TO_CHAR(PAYDATE, 'DD') = TO_CHAR(SYSDATE, 'DD') THEN 1 ELSE 0 END AS CK" + 
+					" FROM POINTPAY P LEFT JOIN MEMBER M" + 
+					" ON M.MEM_NO = P.MEM_NO" + 
+					" WHERE POINTPAY_NO = ?";
+		
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		
+		pstmt.setString(1, pno);
+		
+		ResultSet rs = pstmt.executeQuery();
+		
+		while (rs.next())
+		{		
+			result = rs.getInt(1);
+		}
+
+		rs.close();
+		pstmt.close();
+		conn.close();
+		
+		return result;
+	}
+	
+	// 5-4. 환불
+	@Override
+	public int refundAdd(String pno, int pointPay) throws SQLException
+	{
+		int result = 0;
+		
+		Connection conn = dataSource.getConnection();
+		
+		String sql = "INSERT INTO POINTRE(POINTRE_NO, POINTPAY_NO, POINTRE_DATE, POINTREPAY)" + 
+				"VALUES('POINTRE-'||SEQ_POINTRE.NEXTVAL, ?, SYSDATE, ?)";
+		
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, pno);
+		pstmt.setInt(2, pointPay);
+		
+		result = pstmt.executeUpdate();
+		
+		pstmt.close();
+		conn.close();
+		
+		return result;
+		
 	}
 }

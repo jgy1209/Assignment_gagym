@@ -58,7 +58,7 @@
 	<div id="outer">
 		<div id="inner">
 
-			<button type="button" id="updateBtn" class="btn btn-default" value="MEMBER-1">마이페이지</button>
+			<button type="button" id="updateBtn" class="btn btn-default" value="MEMBER-5">마이페이지</button>
 
 
 		</div>

@@ -95,6 +95,7 @@
 								
 								<br>
 								
+								<div class="col-md-3"></div>
 								<div>
 									<button type="submit" class="btn btn-default" id="submitBtn">
 										추가
