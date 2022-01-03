@@ -78,6 +78,10 @@
 					
 					<div style="text-align: center;">
 						<button type="submit" class="btn">탈퇴</button>
+
+						<button type="button" class="btn btn-default" id="listBtn" onclick="location.href='mypagemain.action?memNo=${param.memNo }'">
+							취소
+						</button>
 					</div>
 				</form>
 				

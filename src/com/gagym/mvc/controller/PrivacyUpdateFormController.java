@@ -6,8 +6,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 
-import com.gagym.mvc.MemberDTO;
-import com.gagym.mvc.dao.IMypageMainDAO;
+import com.gagym.dto.MemberDTO;
+import com.gagym.mvc.inter.IMypageMainDAO;
 
 public class PrivacyUpdateFormController implements Controller
 {

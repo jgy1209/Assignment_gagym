@@ -1,14 +1,18 @@
 package com.gagym.mvc.controller;
 
+import java.util.ArrayList;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 
+import com.gagym.dto.AreaDTO;
+import com.gagym.dto.InstructorDTO;
 import com.gagym.mvc.inter.IMypageMainDAO;
 
-public class WithdrawalController implements Controller
+public class InstructorInsertFormController implements Controller
 {
 	private IMypageMainDAO dao;
 
@@ -17,38 +21,44 @@ public class WithdrawalController implements Controller
 	{
 		this.dao = dao;
 	}
-	
+
 	@Override
 	public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		ModelAndView mav = new ModelAndView();
-		
+
 		String memNo = request.getParameter("memNo");
-		String reason = request.getParameter("radioGroup");
-		String oth = request.getParameter("oth");
-		
-		int result = 0;
-		
+		ArrayList<InstructorDTO> cerList = new ArrayList<InstructorDTO>();
+		ArrayList<AreaDTO> cityList = new ArrayList<AreaDTO>();
+
 		try
 		{
-			result = dao.withdraw(memNo, reason, oth);	
+			int check = dao.insInsertCheck(memNo);
+			cerList = dao.cerList();
+			cityList = dao.cityList();
+			//areaList = dao.areaList();
 			
-			if(result != 0)
+			
+			if(check == 1 )
+			{
+				mav.addObject("cerList", cerList);
+				mav.addObject("cityList", cityList);
+				mav.setViewName("/WEB-INF/view/InstructorInsertForm.jsp");
+			}
+			else
 			{
 				// alert 띄우고 메인 페이지로 가기
-				mav.addObject("msg","회원탈퇴가 완료되었습니다.");
-	            mav.addObject("url","mainmenu.action");
+				mav.addObject("msg","강사신청 중이거나 이미 강사입니다.");
+	            mav.addObject("url","mypagemain.action");
 	            
 	            mav.setViewName("/WEB-INF/view/Alert.jsp");
 			}
-			
+
 		} catch (Exception e)
 		{
 			System.out.println(e.toString());
 		}
-		
-		
+
 		return mav;
 	}
-	
 }

@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 
-import com.gagym.mvc.dao.IMypageMainDAO;
+import com.gagym.mvc.inter.IMypageMainDAO;
 
 public class RefundController implements Controller
 {
@@ -39,7 +39,7 @@ public class RefundController implements Controller
 				mav.addObject("msg", "환불이 완료되었습니다.");
 	            mav.addObject("url","payrefund.action?memNo="+memNo);
 	            
-	            mav.setViewName("/WEB-INF/view/alert.jsp");
+	            mav.setViewName("/WEB-INF/view/Alert.jsp");
 			}
 			
 			

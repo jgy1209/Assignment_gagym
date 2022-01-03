@@ -6,8 +6,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 
-import com.gagym.mvc.MemberDTO;
-import com.gagym.mvc.dao.IMypageMainDAO;
+import com.gagym.dto.MemberDTO;
+import com.gagym.mvc.inter.IMypageMainDAO;
 
 public class PrivacyUpdateController implements Controller
 {
@@ -54,7 +54,7 @@ public class PrivacyUpdateController implements Controller
 					mav.addObject("msg", "정보 수정이 완료되었습니다.");
 		            mav.addObject("url","mypagemain.action?memNo="+memNo);
 		            
-		            mav.setViewName("/WEB-INF/view/alert.jsp");
+		            mav.setViewName("/WEB-INF/view/Alert.jsp");
 				}
 			
 			

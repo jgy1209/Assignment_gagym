@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 
-import com.gagym.mvc.dao.IMypageMainDAO;
+import com.gagym.mvc.inter.IMypageMainDAO;
 
 public class WithdrawalCheckController implements Controller
 {
@@ -61,7 +61,7 @@ public class WithdrawalCheckController implements Controller
 					mav.addObject("msg", msg);
 		            mav.addObject("url","mypagemain.action?memNo="+memNo);
 		            
-		            mav.setViewName("/WEB-INF/view/alert.jsp");
+		            mav.setViewName("/WEB-INF/view/Alert.jsp");
 				}
 				
 			}
@@ -71,7 +71,7 @@ public class WithdrawalCheckController implements Controller
 				mav.addObject("msg","비밀번호가 틀렸습니다.");
 	            mav.addObject("url","withdrawalform.action?memNo="+memNo);
 	            
-	            mav.setViewName("/WEB-INF/view/alert.jsp");
+	            mav.setViewName("/WEB-INF/view/Alert.jsp");
 
 			}
 			

@@ -1,15 +1,17 @@
 package com.gagym.mvc.controller;
 
+import java.util.ArrayList;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 
+import com.gagym.dto.InstructorDTO;
 import com.gagym.mvc.inter.IMypageMainDAO;
-import com.gagym.dto.MemberDTO;
 
-public class WithdrawalFormController implements Controller
+public class InstructorInsertController implements Controller
 {
 	private IMypageMainDAO dao;
 
@@ -18,28 +20,14 @@ public class WithdrawalFormController implements Controller
 	{
 		this.dao = dao;
 	}
-	
+
 	@Override
 	public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		ModelAndView mav = new ModelAndView();
+
 		
-		String memNo = request.getParameter("memNo");
-		
-		try
-		{
-			MemberDTO nameId = dao.getNameId(memNo);
-			
-			mav.addObject("nameId", nameId);
-			
-			mav.setViewName("/WEB-INF/view/WithdrawalForm.jsp");
-			
-		} catch (Exception e)
-		{
-			System.out.println(e.toString());
-		}
-		
+
 		return mav;
 	}
-	
 }

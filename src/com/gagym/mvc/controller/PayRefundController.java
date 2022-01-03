@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 
-import com.gagym.mvc.dao.IMypageMainDAO;
-import com.gagym.mvc.PointDTO;
+import com.gagym.mvc.inter.IMypageMainDAO;
+import com.gagym.dto.PointDTO;
 
 public class PayRefundController implements Controller
 {

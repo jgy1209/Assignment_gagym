@@ -9,14 +9,10 @@
 <head>
 <meta charset="UTF-8">
 <title>MyPageMain.jsp</title>
-<link rel="stylesheet" type="text/css"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.css">
-<script type="text/javascript"
-	src="https://code.jquery.com/jquery.min.js"></script>
-<script type="text/javascript"
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-<link rel="stylesheet" type="text/css"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.css">
+<script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 
 <style type="text/css">
@@ -212,7 +208,7 @@ html ul.tab li.active, html ul.tab li.active a:hover {
 
 					<div class="row">
 						<button type="button" class="btn btn-default col-md-3">알림</button>
-						<button type="button" class="btn btn-default col-md-3">강사신청</button>
+						<button type="button" class="btn btn-default col-md-3" onclick="location.href='instructorinsertform.action?memNo=${param.memNo}'">강사신청</button>
 						<button type="button" class="btn btn-default col-md-3" onclick="location.href='payrefund.action?memNo=${param.memNo}'">결제환불내역</button>
 						<button type="button" class="btn btn-default col-md-3" onclick="location.href='withdrawalform.action?memNo=${param.memNo}'">회원탈퇴</button>
 					</div>

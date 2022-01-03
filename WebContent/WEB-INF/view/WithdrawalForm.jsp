@@ -51,7 +51,10 @@
 					</div>
 					<br><br>
 				
-					<button type="submit" class="btn">비밀번호 확인</button>
+					<button type="submit" class="btn btn-default">비밀번호 확인</button>
+					<button type="button" class="btn btn-default" id="listBtn" onclick="location.href='mypagemain.action?memNo=${param.memNo }'">
+						돌아가기
+					</button>
 				</div>
 			</div>
 		</form>

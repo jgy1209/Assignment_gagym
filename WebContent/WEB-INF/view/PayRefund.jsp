@@ -109,6 +109,12 @@ th {
 						</tr>
 					</tbody>
 				</table>
+				<div>
+					<button type="button" class="btn btn-default" id="listBtn" onclick="location.href='mypagemain.action?memNo=${param.memNo }'">
+						돌아가기
+					</button>
+					<br><br>
+				</div>
 			</div>
 		</div>
 	</div>

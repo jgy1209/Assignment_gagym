@@ -9,11 +9,13 @@ import java.util.ArrayList;
 
 import javax.sql.DataSource;
 
-import com.gagym.mvc.EyebodyDTO;
-import com.gagym.mvc.InbodyDTO;
-import com.gagym.mvc.MemberDTO;
-import com.gagym.mvc.PointDTO;
-import com.gagym.mvc.dao.IMypageMainDAO;
+import com.gagym.dto.AreaDTO;
+import com.gagym.dto.EyebodyDTO;
+import com.gagym.dto.InbodyDTO;
+import com.gagym.dto.InstructorDTO;
+import com.gagym.dto.MemberDTO;
+import com.gagym.dto.PointDTO;
+import com.gagym.mvc.inter.IMypageMainDAO;
 
 public class MypageMainDAO implements IMypageMainDAO
 {
@@ -571,6 +573,298 @@ public class MypageMainDAO implements IMypageMainDAO
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		pstmt.setString(1, pno);
 		pstmt.setInt(2, pointPay);
+		
+		result = pstmt.executeUpdate();
+		
+		pstmt.close();
+		conn.close();
+		
+		return result;
+		
+	}
+	
+	// 6-1. 강사 신청 중인지 체크(1이면 신청가능)
+	@Override
+	public int insInsertCheck(String mno) throws SQLException
+	{
+		int result = 0;		
+		
+		Connection conn = dataSource.getConnection();
+		
+		String sql="SELECT IR.REQ_NO" + 
+				" FROM INSTRUCTOR_REQUEST IR LEFT JOIN INSTRUCTOR_REQUEST_PRC IRP" + 
+				" ON IR.REQ_NO = IRP.REQ_NO" + 
+				" WHERE IR.MEM_NO = ? AND PRC_CODE=1";
+		
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		
+		pstmt.setString(1, mno);
+		
+		ResultSet rs = pstmt.executeQuery();
+		
+		String check = null;
+		
+		while (rs.next())
+		{		
+			check = rs.getString(1);
+		}
+		
+		if(check == null)	// 신청X, 반려
+		{
+			result = 1; 
+		}
+		
+		rs.close();
+		pstmt.close();
+		conn.close();
+		
+		return result;
+	}
+	
+	// 6-2. 자격증 리스트
+	@Override
+	public ArrayList<InstructorDTO> cerList() throws SQLException
+	{
+		ArrayList<InstructorDTO> result = new ArrayList<InstructorDTO>();
+
+		Connection conn = dataSource.getConnection();
+
+		String sql = "SELECT CER_NO, CER_NAME FROM CERTIFICATE";
+
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+
+		ResultSet rs = pstmt.executeQuery();
+
+		while (rs.next())
+		{
+			InstructorDTO ins = new InstructorDTO();
+			
+			ins.setCerNo(rs.getString(1));
+			ins.setCerName(rs.getString(2));
+			
+			result.add(ins);
+		}
+
+		rs.close();
+		pstmt.close();
+		conn.close();
+
+		return result;
+
+	}
+	
+	// 6-3. 도시 리스트(1차 select)
+	@Override
+	public ArrayList<AreaDTO> cityList() throws SQLException
+	{
+		ArrayList<AreaDTO> result = new ArrayList<AreaDTO>();
+
+		Connection conn = dataSource.getConnection();
+
+		String sql = "SELECT CITY_NO, CITY_NAME FROM CITY";
+
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+
+		ResultSet rs = pstmt.executeQuery();
+
+		while (rs.next())
+		{
+			AreaDTO area = new AreaDTO();
+			
+			area.setCityNo(rs.getString(1));
+			area.setCityName(rs.getString(2));
+			
+			result.add(area);
+		}
+
+		rs.close();
+		pstmt.close();
+		conn.close();
+
+		return result;
+
+	}
+	
+	// 6-4. 시군구 리스트(2차 select-AJAX)
+	@Override
+	public ArrayList<AreaDTO> areaList(String cno) throws SQLException
+	{
+		ArrayList<AreaDTO> result = new ArrayList<AreaDTO>();
+
+		Connection conn = dataSource.getConnection();
+
+		String sql = "SELECT SIGUNGU_NO, SIGUNGU_NAME FROM SIGUNGU WHERE CITY_NO = ?";
+
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		
+		pstmt.setString(1, cno);
+
+		ResultSet rs = pstmt.executeQuery();
+
+		while (rs.next())
+		{
+			AreaDTO area = new AreaDTO();
+			
+			area.setSigunguNo(rs.getString(1));
+			area.setSigunguName(rs.getString(2));
+			
+			result.add(area);
+		}
+
+		rs.close();
+		pstmt.close();
+		conn.close();
+
+		return result;
+
+	}
+	
+	// 6-5-1. 강사신청 INSERT
+	@Override
+	public int insReqAdd(String memNo) throws SQLException
+	{
+		int result = 0;
+		
+		Connection conn = dataSource.getConnection();
+		
+		String sql = "INSERT INTO INSTRUCTOR_REQUEST(REQ_NO, MEM_NO, REQ_DATE)" 
+					 + " VALUES('IR-' || SEQ_IR.NEXTVAL, ?, SYSDATE)";
+		
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, memNo);
+		
+		result = pstmt.executeUpdate();
+		
+		pstmt.close();
+		conn.close();
+		
+		return result;
+		
+	}
+	
+	// 6-6. 강사신청번호 (처리코드가 NULL)
+	@Override
+	public String getInsReqNo(String memNo) throws SQLException
+	{
+		String result = null;		
+		
+		Connection conn = dataSource.getConnection();
+		
+		String sql="SELECT REQ_NO" + 
+					" FROM" + 
+					"    (SELECT REQ_NO" + 
+					"    FROM INSTRUCTOR_REQUEST" + 
+					"    WHERE MEM_NO = ?" + 
+					"    ORDER BY REQ_DATE DESC)" + 
+					" WHERE ROWNUM=1";
+		
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		
+		pstmt.setString(1, memNo);
+		
+		ResultSet rs = pstmt.executeQuery();
+		
+		while (rs.next())
+		{		
+			result = rs.getString(1);
+		}
+		
+		rs.close();
+		pstmt.close();
+		conn.close();
+		
+		return result;
+	}
+	
+	// 6-5-2. 자격증증명 INSERT
+	@Override
+	public int insCerAdd(InstructorDTO ins, String reqNo) throws SQLException
+	{
+		int result = 0;
+		
+		Connection conn = dataSource.getConnection();
+		
+		String sql = "INSERT INTO CERTIFICATE_PROOF(PROOF_NO, REQ_NO, CER_NO, CER_DATE, PROOF_PATH, ADD_DATE)" + 
+					" VALUES('CP-' || SEQ_CP.NEXTVAL, ?, ?, TO_DATE(?, 'YYYY-MM-DD'), 'images/img.jpg', SYSDATE)";
+		
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, reqNo);
+		pstmt.setString(2, ins.getCerNo());
+		pstmt.setString(3, ins.getCerDate());
+		
+		result = pstmt.executeUpdate();
+		
+		pstmt.close();
+		conn.close();
+		
+		return result;
+		
+	}
+	// 6-5-3. 수상경력 INSERT
+	@Override
+	public int insPrzAdd(InstructorDTO ins, String reqNo) throws SQLException
+	{
+		int result = 0;
+		
+		Connection conn = dataSource.getConnection();
+		
+		String sql = "INSERT INTO PRIZE(PRZ_NO, REQ_NO, PRZ_NAME, PRZ_MEDAL, PRZ_DATE, ADD_DATE)" + 
+				" VALUES('PRIZE-'|| SEQ_PRIZE.NEXTVAL, ?, ?, ?, ?, SYSDATE)";
+		
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, reqNo);
+		pstmt.setString(2, ins.getPrzName());
+		pstmt.setString(3, ins.getPrzMedal());
+		pstmt.setString(4, ins.getPrzDate());
+		
+		result = pstmt.executeUpdate();
+		
+		pstmt.close();
+		conn.close();
+		
+		return result;
+		
+	}
+	// 6-5-4. 활동경력 INSERT
+	@Override
+	public int insExpAdd(InstructorDTO ins, String reqNo) throws SQLException
+	{
+		int result = 0;
+		
+		Connection conn = dataSource.getConnection();
+		
+		String sql = "INSERT INTO EXPERIENCE(EXP_NO, REQ_NO, EXP_CONTENT, EXP_STARTDATE, EXP_ENDDATE, ADD_DATE)" + 
+				" VALUES('EXPERIENCE-'|| SEQ_EXPERIENCE.NEXTVAL, ?, ?, TO_DATE(?, 'YYYY-MM-DD')" + 
+				" , TO_DATE(?, 'YYYY-MM-DD'), SYSDATE)";
+		
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, reqNo);
+		pstmt.setString(2, ins.getExpContent());
+		pstmt.setString(3, ins.getExpStartDate());
+		pstmt.setString(4, ins.getExpEndDate());
+		
+		result = pstmt.executeUpdate();
+		
+		pstmt.close();
+		conn.close();
+		
+		return result;
+		
+	}
+	// 6-5-5. 활동지역 INSERT
+	@Override
+	public int insAreaAdd(String reqNo, String sigunguNo) throws SQLException
+	{
+		int result = 0;
+		
+		Connection conn = dataSource.getConnection();
+		
+		String sql = "INSERT INTO INSTRUCTOR_AREA(AREA_NO, REQ_NO, SIGUNGU_NO, ADD_DATE)" + 
+				" VALUES('IA-' || SEQ_IA.NEXTVAL, ?, ?, SYSDATE";
+		
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, reqNo);
+		pstmt.setString(2, sigunguNo);
 		
 		result = pstmt.executeUpdate();
 		

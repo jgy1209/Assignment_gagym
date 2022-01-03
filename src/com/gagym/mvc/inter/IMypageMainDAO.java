@@ -1,12 +1,14 @@
-package com.gagym.mvc.dao;
+package com.gagym.mvc.inter;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import com.gagym.mvc.EyebodyDTO;
-import com.gagym.mvc.InbodyDTO;
-import com.gagym.mvc.MemberDTO;
-import com.gagym.mvc.PointDTO;
+import com.gagym.dto.EyebodyDTO;
+import com.gagym.dto.InbodyDTO;
+import com.gagym.dto.InstructorDTO;
+import com.gagym.dto.MemberDTO;
+import com.gagym.dto.PointDTO;
+import com.gagym.dto.AreaDTO;
 
 public interface IMypageMainDAO
 {
@@ -44,5 +46,30 @@ public interface IMypageMainDAO
 	int refundCheck(String pno) throws SQLException;
 
 	int refundAdd(String pno, int point) throws SQLException;
+	
+
+	ArrayList<InstructorDTO> cerList() throws SQLException;
+
+	int insInsertCheck(String mno) throws SQLException;
+
+	ArrayList<AreaDTO> cityList() throws SQLException;
+	
+	ArrayList<AreaDTO> areaList(String cno) throws SQLException;
+
+	
+	int insReqAdd(String memNo) throws SQLException;
+
+	String getInsReqNo(String memNo) throws SQLException;
+
+	int insCerAdd(InstructorDTO ins, String reqNo) throws SQLException;
+
+	int insPrzAdd(InstructorDTO ins, String reqNo) throws SQLException;
+
+	int insExpAdd(InstructorDTO ins, String reqNo) throws SQLException;
+
+	int insAreaAdd(String reqNo, String sigunguNo) throws SQLException;
+
+
+
 
 }

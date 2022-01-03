@@ -1,4 +1,4 @@
-package com.gagym.mvc;
+package com.gagym.dto;
 
 public class InbodyDTO
 {
