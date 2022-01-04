@@ -2,6 +2,7 @@ package com.gagym.mvc.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
@@ -23,7 +24,9 @@ public class WithdrawalController implements Controller
 	{
 		ModelAndView mav = new ModelAndView();
 		
-		String memNo = request.getParameter("memNo");
+		HttpSession session = request.getSession();
+		
+		String memNo = (String)session.getAttribute("memNo");
 		String reason = request.getParameter("radioGroup");
 		String oth = request.getParameter("oth");
 		
@@ -33,13 +36,17 @@ public class WithdrawalController implements Controller
 		{
 			result = dao.withdraw(memNo, reason, oth);	
 			
+			session.removeAttribute("memNo");
+			session.removeAttribute("insNo");
+			session.removeAttribute("admin");
+			
 			if(result != 0)
 			{
 				// alert 띄우고 메인 페이지로 가기
 				mav.addObject("msg","회원탈퇴가 완료되었습니다.");
-	            mav.addObject("url","mainmenu.action");
+	            mav.addObject("url","main.action");
 	            
-	            mav.setViewName("/WEB-INF/view/Alert.jsp");
+	            mav.setViewName("/WEB-INF/myPageView/Alert.jsp");
 			}
 			
 		} catch (Exception e)

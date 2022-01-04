@@ -26,6 +26,8 @@ public interface IMypageMainDAO
 	int eyebodyAdd(EyebodyDTO eyebody) throws SQLException;
 
 	int inbodyRemove(String inbodyNo) throws SQLException;
+
+	int eyebodyRemove(String eyebodyNo) throws SQLException;
 	
 
 	MemberDTO getNameId(String mno) throws SQLException;
@@ -56,20 +58,15 @@ public interface IMypageMainDAO
 	
 	ArrayList<AreaDTO> areaList(String cno) throws SQLException;
 
-	
 	int insReqAdd(String memNo) throws SQLException;
 
-	String getInsReqNo(String memNo) throws SQLException;
+	int insCerAdd(String memNo, String cerNo, String cerDate, String proofPath) throws SQLException;
 
-	int insCerAdd(InstructorDTO ins, String reqNo) throws SQLException;
+	int insPrzAdd(String memNo, String przName, String przMedal, String przDate) throws SQLException;
 
-	int insPrzAdd(InstructorDTO ins, String reqNo) throws SQLException;
+	int insExpAdd(String memNo, String expContent, String expStartDate, String expEndDate) throws SQLException;
 
-	int insExpAdd(InstructorDTO ins, String reqNo) throws SQLException;
-
-	int insAreaAdd(String reqNo, String sigunguNo) throws SQLException;
-
-
+	int insAreaAdd(String memNo, String sigunguNo) throws SQLException;
 
 
 }

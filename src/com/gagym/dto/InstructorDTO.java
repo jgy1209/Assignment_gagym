@@ -1,44 +1,30 @@
+/*============================
+  InstructorProfileDTO.java
+  - 강사 프로필
+============================*/
+
 package com.gagym.dto;
 
 public class InstructorDTO
 {
-	/*
-	// 강사 번호, (강사신청 처리 번호), 강사명, 한줄 소개, (강사 신청 번호)
-	private String insNo, reqPrcNo, memName, introduce, reqNo;
+	// 강사 번호, 강사명, 나이, 성별, 한줄 소개
+	private String insNo, insName, age, gender, email, introduce;
 	
-	// (활동지역 번호), (시군구 번호), 시군구명
-	private String areaNo, sigunguNo, sigunguName;
-	
-	// (수상경력 번호), 수상경력명, 수상경력 메달, 수상경력날짜
-	private String przNo, przName, przMedal, przDate;
-	
-	// (활동경력 번호), 활동내역, 활동경력 시작날짜, 활동경력 끝날짜
-	private String expNo, expContent, expStartDate, expEndDate;
-	
-	// (자격증 증명 번호), 자격증 번호, 자격증명, 자격증 발급날짜, 자격증 증명자료경로, (발급처 번호), 발급처
-	private String proofNo, cerNo, cerName, cerDate, proofPath, issueNo, issueName;
-	*/
-	
-	// 강사 번호, 강사명, 한줄 소개
-	private String insNo, memName, introduce;
-	
-	// 시군구명
-	private String sigunguName;
-	
-	// 수상경력명, 수상경력 메달, 수상경력날짜
-	private String przName, przMedal, przDate;
+	// 프로필사진경로명, 활동지역
+	private String profilePath, area;
 	
 	// 활동내역, 활동경력 시작날짜, 활동경력 끝날짜
 	private String expContent, expStartDate, expEndDate;
 	
-	// 자격증 번호, 자격증명, 자격증 발급날짜, 자격증 증명자료경로, 발급처
+	// 수상경력명, 수상경력 메달, 수상경력날짜
+	private String przName, przMedal, przDate;
+	
+	// 자격증명, 자격증 발급날짜, 자격증 증명자료경로, 발급처
 	private String cerNo, cerName, cerDate, proofPath, issueName;
 	
 	// 강사박탈번호, 관리자아이디, 박탈사유, 박탈날짜
 	private String insDropNo, adminId, dropReason, dropDate;
 
-	
-	// getter / setter
 	public String getInsNo()
 	{
 		return insNo;
@@ -49,14 +35,44 @@ public class InstructorDTO
 		this.insNo = insNo;
 	}
 
-	public String getMemName()
+	public String getInsName()
 	{
-		return memName;
+		return insName;
 	}
 
-	public void setMemName(String memName)
+	public void setInsName(String insName)
 	{
-		this.memName = memName;
+		this.insName = insName;
+	}
+
+	public String getAge()
+	{
+		return age;
+	}
+
+	public void setAge(String age)
+	{
+		this.age = age;
+	}
+
+	public String getGender()
+	{
+		return gender;
+	}
+
+	public void setGender(String gender)
+	{
+		this.gender = gender;
+	}
+
+	public String getEmail()
+	{
+		return email;
+	}
+
+	public void setEmail(String email)
+	{
+		this.email = email;
 	}
 
 	public String getIntroduce()
@@ -69,44 +85,24 @@ public class InstructorDTO
 		this.introduce = introduce;
 	}
 
-	public String getSigunguName()
+	public String getProfilePath()
 	{
-		return sigunguName;
+		return profilePath;
 	}
 
-	public void setSigunguName(String sigunguName)
+	public void setProfilePath(String profilePath)
 	{
-		this.sigunguName = sigunguName;
+		this.profilePath = profilePath;
 	}
 
-	public String getPrzName()
+	public String getArea()
 	{
-		return przName;
+		return area;
 	}
 
-	public void setPrzName(String przName)
+	public void setArea(String area)
 	{
-		this.przName = przName;
-	}
-
-	public String getPrzMedal()
-	{
-		return przMedal;
-	}
-
-	public void setPrzMedal(String przMedal)
-	{
-		this.przMedal = przMedal;
-	}
-
-	public String getPrzDate()
-	{
-		return przDate;
-	}
-
-	public void setPrzDate(String przDate)
-	{
-		this.przDate = przDate;
+		this.area = area;
 	}
 
 	public String getExpContent()
@@ -137,6 +133,36 @@ public class InstructorDTO
 	public void setExpEndDate(String expEndDate)
 	{
 		this.expEndDate = expEndDate;
+	}
+
+	public String getPrzName()
+	{
+		return przName;
+	}
+
+	public void setPrzName(String przName)
+	{
+		this.przName = przName;
+	}
+
+	public String getPrzMedal()
+	{
+		return przMedal;
+	}
+
+	public void setPrzMedal(String przMedal)
+	{
+		this.przMedal = przMedal;
+	}
+
+	public String getPrzDate()
+	{
+		return przDate;
+	}
+
+	public void setPrzDate(String przDate)
+	{
+		this.przDate = przDate;
 	}
 
 	public String getCerNo()
@@ -229,6 +255,4 @@ public class InstructorDTO
 		this.dropDate = dropDate;
 	}
 
-	
-	
 }

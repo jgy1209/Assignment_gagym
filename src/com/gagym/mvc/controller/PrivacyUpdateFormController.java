@@ -2,6 +2,7 @@ package com.gagym.mvc.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
@@ -24,7 +25,9 @@ public class PrivacyUpdateFormController implements Controller
 	{
 		ModelAndView mav = new ModelAndView();
 		
-		String memNo = request.getParameter("memNo");
+		HttpSession session = request.getSession();
+		
+		String memNo = (String)session.getAttribute("memNo");
 		
 		MemberDTO member = new MemberDTO();
 		
@@ -34,7 +37,7 @@ public class PrivacyUpdateFormController implements Controller
 				
 				mav.addObject("member", member);
 				
-				mav.setViewName("/WEB-INF/view/PrivacyUpdateForm.jsp");
+				mav.setViewName("/WEB-INF/myPageView/PrivacyUpdateForm.jsp");
 			
 			
 		} catch (Exception e)

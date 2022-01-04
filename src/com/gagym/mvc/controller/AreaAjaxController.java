@@ -36,7 +36,7 @@ public class AreaAjaxController implements Controller
 			
 			mav.addObject("areaList", areaList);
 			
-			mav.setViewName("/WEB-INF/view/AreaAjax.jsp");
+			mav.setViewName("/WEB-INF/myPageView/AreaAjax.jsp");
 			
 			
 		} catch (Exception e)

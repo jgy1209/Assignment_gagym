@@ -2,6 +2,7 @@ package com.gagym.mvc.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
@@ -24,7 +25,9 @@ public class PrivacyUpdateController implements Controller
 	{
 		ModelAndView mav = new ModelAndView();
 		
-		String memNo = request.getParameter("memNo");
+		HttpSession session = request.getSession();
+		
+		String memNo = (String)session.getAttribute("memNo");
 		String zipCode = request.getParameter("zipCode");
 		String addr = request.getParameter("addr");
 		String detailAddr = request.getParameter("detailAddr");
@@ -54,7 +57,7 @@ public class PrivacyUpdateController implements Controller
 					mav.addObject("msg", "정보 수정이 완료되었습니다.");
 		            mav.addObject("url","mypagemain.action?memNo="+memNo);
 		            
-		            mav.setViewName("/WEB-INF/view/Alert.jsp");
+		            mav.setViewName("/WEB-INF/myPageView/Alert.jsp");
 				}
 			
 			

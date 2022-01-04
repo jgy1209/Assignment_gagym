@@ -2,6 +2,7 @@ package com.gagym.mvc.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
@@ -23,7 +24,9 @@ public class RefundController implements Controller
 	{
 		ModelAndView mav = new ModelAndView();
 		
-		String memNo = request.getParameter("memNo");
+		HttpSession session = request.getSession();
+		
+		String memNo = (String)session.getAttribute("memNo");
 		String pointPayNo = request.getParameter("pointPayNo");
 		int pointPay = Integer.parseInt(request.getParameter("pointPay"));
 		
@@ -39,7 +42,7 @@ public class RefundController implements Controller
 				mav.addObject("msg", "환불이 완료되었습니다.");
 	            mav.addObject("url","payrefund.action?memNo="+memNo);
 	            
-	            mav.setViewName("/WEB-INF/view/Alert.jsp");
+	            mav.setViewName("/WEB-INF/myPageView/Alert.jsp");
 			}
 			
 			

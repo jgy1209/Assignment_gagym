@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.gagym.mybatis.inter.IInstructorDAO">
+
+	<select id="profile" resultType="com.gagym.dto.InstructorDTO">
+		SELECT INS_NO AS INSNO, INS_NAME AS INSNAME, AGE, GENDER, EMAIL, INTRODUCE, PROFILE_PATH AS PROFILEPATH
+		FROM INSPRIVACYVIEW
+		WHERE INS_NO=#{insNo}
+	</select>
+	
+	<select id="searchReq" resultType="java.lang.String">
+		SELECT FN_REQ_NO(INS_NO) AS REQNO
+		FROM INSTRUCTOR
+		WHERE INS_NO=#{insNo}
+	</select>
+	
+	<select id="areas" resultType="com.gagym.dto.InstructorDTO">
+		SELECT AREA
+		FROM INSAREAVIEW
+		WHERE REQ_NO=#{reqNo}
+		AND PRC_CONTENT='승인'
+	</select>
+	
+	<select id="experiences" resultType="com.gagym.dto.InstructorDTO">
+		SELECT EXP_CONTENT AS EXPCONTENT
+		, TO_CHAR(EXP_STARTDATE, 'YYYY/MM/DD') AS EXPSTARTDATE
+		, TO_CHAR(EXP_ENDDATE, 'YYYY/MM/DD') AS EXPENDDATE
+		FROM INSEXPVIEW
+		WHERE REQ_NO=#{reqNo}
+		AND PRC_CONTENT='승인'
+		ORDER BY EXPSTARTDATE DESC
+	</select>
+	
+	<select id="prizes" resultType="com.gagym.dto.InstructorDTO">
+		SELECT PRZ_NAME AS PRZNAME, PRZ_MEDAL AS PRZMEDAL
+		, TO_CHAR(PRZ_DATE, 'YYYY/MM/DD') AS PRZDATE
+		FROM INSPRZVIEW
+		WHERE REQ_NO=#{reqNo}
+		AND PRC_CONTENT='승인'
+		ORDER BY PRZDATE DESC
+	</select>
+	
+	<select id="certificates" resultType="com.gagym.dto.InstructorDTO">
+		SELECT CER_NAME AS CERNAME, ISSUE_NAME AS ISSUENAME
+		, TO_CHAR(CER_DATE, 'YYYY/MM/DD') AS CERDATE
+		FROM INSCERVIEW
+		WHERE REQ_NO=#{reqNo}
+		AND PRC_CONTENT='승인'
+		ORDER BY CERDATE DESC
+	</select>
+	
+	<select id="follower" resultType="java.lang.Integer">
+		SELECT COUNT(*)
+		FROM FOLLOW
+		WHERE INS_NO=#{insNo}
+	</select>
+
+	<select id="grade" resultType="java.lang.Double">
+		SELECT NVL((SUM(GRADE)/(COUNT(*))),0) AS GRADE
+		FROM REVIEWVIEW
+		WHERE INS_NO=#{insNo}
+	</select>
+	
+	<select id="nowClass" resultType="com.gagym.dto.ReviewDTO">
+		SELECT C.CLASS_NO AS CLASSNO, C.CLASS_NAME AS CLASSNAME
+		FROM CLASS C LEFT JOIN CLASS_STOP CS
+		ON C.CLASS_NO = CS.CLASS_NO
+		WHERE INS_NO=#{insNo}
+		AND CLASS_STARTDATE<![CDATA[<]]>SYSDATE
+		AND CLASS_ENDDATE<![CDATA[>]]>SYSDATE
+		AND CS.STOP_DATE IS NULL
+	</select>
+	
+	<select id="reviews" resultType="com.gagym.dto.ReviewDTO">
+		SELECT CLASS_NO AS CLASSNO, CLASS_NAME AS CLASSNAME, REVIEW_CONTENT AS REVIEWCONTENT
+		, GRADE, REVIEW_DATE AS REVIEWDATE, MEM_ID AS MEMID, MEM_NAME AS MEMNAME
+		FROM REVIEWVIEW
+		WHERE INS_NO=#{insNo}
+		AND ROWNUM<![CDATA[<=]]>2
+		ORDER BY REVIEW_DATE DESC
+	</select>
+
+</mapper>

@@ -2,6 +2,7 @@ package com.gagym.mvc.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
@@ -24,7 +25,9 @@ public class WithdrawalFormController implements Controller
 	{
 		ModelAndView mav = new ModelAndView();
 		
-		String memNo = request.getParameter("memNo");
+		HttpSession session = request.getSession();
+		
+		String memNo = (String)session.getAttribute("memNo");
 		
 		try
 		{
@@ -32,7 +35,7 @@ public class WithdrawalFormController implements Controller
 			
 			mav.addObject("nameId", nameId);
 			
-			mav.setViewName("/WEB-INF/view/WithdrawalForm.jsp");
+			mav.setViewName("/WEB-INF/myPageView/WithdrawalForm.jsp");
 			
 		} catch (Exception e)
 		{

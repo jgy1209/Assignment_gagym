@@ -2,6 +2,7 @@ package com.gagym.mvc.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
@@ -23,7 +24,9 @@ public class WithdrawalCheckController implements Controller
 	{
 		ModelAndView mav = new ModelAndView();
 		
-		String memNo = request.getParameter("memNo");
+		HttpSession session = request.getSession();
+		
+		String memNo = (String)session.getAttribute("memNo");
 		String pwdCheck = request.getParameter("pwdCheck");
 		
 		try
@@ -40,7 +43,7 @@ public class WithdrawalCheckController implements Controller
 				if(check1 + check2 == 0)	
 				{
 					mav.addObject("memNo", memNo);
-					mav.setViewName("/WEB-INF/view/WithdrawalReason.jsp");
+					mav.setViewName("/WEB-INF/myPageView/WithdrawalReason.jsp");
 				}
 				else
 				{
@@ -61,7 +64,7 @@ public class WithdrawalCheckController implements Controller
 					mav.addObject("msg", msg);
 		            mav.addObject("url","mypagemain.action?memNo="+memNo);
 		            
-		            mav.setViewName("/WEB-INF/view/Alert.jsp");
+		            mav.setViewName("/WEB-INF/myPageView/Alert.jsp");
 				}
 				
 			}
@@ -71,7 +74,7 @@ public class WithdrawalCheckController implements Controller
 				mav.addObject("msg","비밀번호가 틀렸습니다.");
 	            mav.addObject("url","withdrawalform.action?memNo="+memNo);
 	            
-	            mav.setViewName("/WEB-INF/view/Alert.jsp");
+	            mav.setViewName("/WEB-INF/myPageView/Alert.jsp");
 
 			}
 			

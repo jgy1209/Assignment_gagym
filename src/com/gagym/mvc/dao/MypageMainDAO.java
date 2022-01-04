@@ -37,7 +37,7 @@ public class MypageMainDAO implements IMypageMainDAO
 
 		Connection conn = dataSource.getConnection();
 
-		String sql = "SELECT MEM_NO, ZIP_CODE, ADDR, DETAIL_ADDR, MEM_NAME, TEL, HOMETEL, EMAIL, FN_GENDER(CRYPTPACK.DECRYPT(SSN2, '1234567')) AS GENDER" + 
+		String sql = "SELECT ZIP_CODE, ADDR, DETAIL_ADDR, MEM_NAME, TEL, HOMETEL, EMAIL, FN_GENDER(CRYPTPACK.DECRYPT(SSN2, '1234567')) AS GENDER" + 
 					", CASE WHEN SUBSTR(CRYPTPACK.DECRYPT(SSN2, '1234567'), 1, 1) IN ('1','2')" + 
 					" THEN EXTRACT(YEAR FROM SYSDATE)-(TO_NUMBER(SUBSTR(SSN1, 1, 2)) + 1899)" + 
 					" WHEN SUBSTR(CRYPTPACK.DECRYPT(SSN2, '1234567'), 1, 1) IN ('3','4')" + 
@@ -55,17 +55,15 @@ public class MypageMainDAO implements IMypageMainDAO
 
 		while (rs.next())
 		{
-			
-			mem.setMemNo(rs.getString(1));
-			mem.setZipCode(rs.getString(2));
-			mem.setAddr(rs.getString(3));
-			mem.setDetailAddr(rs.getString(4));
-			mem.setMemName(rs.getString(5));
-			mem.setTel(rs.getString(6));
-			mem.setHometel(rs.getString(7));
-			mem.setEmail(rs.getString(8));
-			mem.setGender(rs.getString(9));
-			mem.setAge(rs.getInt(10));
+			mem.setZipCode(rs.getString(1));
+			mem.setAddr(rs.getString(2));
+			mem.setDetailAddr(rs.getString(3));
+			mem.setMemName(rs.getString(4));
+			mem.setTel(rs.getString(5));
+			mem.setHometel(rs.getString(6));
+			mem.setEmail(rs.getString(7));
+			mem.setGender(rs.getString(8));
+			mem.setAge(rs.getInt(9));
 		}
 
 		rs.close();
@@ -243,7 +241,7 @@ public class MypageMainDAO implements IMypageMainDAO
 		Connection conn = dataSource.getConnection();
 		
 		String sql = "INSERT INTO EYEBODY(EYEBODY_NO, MEM_NO, EYEBODY_DATE, PHOTO_PATH)" 
-					+ "VALUES('EYEBODY-'|| SEQ_EYEBODY.NEXTVAL, ?, SYSDATE, ?)";
+					+ " VALUES('EYEBODY-'|| SEQ_EYEBODY.NEXTVAL, ?, SYSDATE, ?)";
 		
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		pstmt.setString(1, eyebody.getMemNo());
@@ -257,6 +255,29 @@ public class MypageMainDAO implements IMypageMainDAO
 		return result;
 		
 	}
+	
+	// 3-3. 눈바디 삭제
+		@Override
+		public int eyebodyRemove(String eyebodyNo) throws SQLException
+		{
+			int result = 0;
+			
+			Connection conn = dataSource.getConnection();
+			
+			String sql = "DELETE FROM EYEBODY WHERE EYEBODY_NO=?";
+			
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, eyebodyNo);
+			
+			result = pstmt.executeUpdate();
+			
+			pstmt.close();
+			conn.close();
+			
+			return result;
+			
+		}
+		
 	
 	// 4-1. 회원 이름, 아이디
 	@Override
@@ -594,7 +615,7 @@ public class MypageMainDAO implements IMypageMainDAO
 		String sql="SELECT IR.REQ_NO" + 
 				" FROM INSTRUCTOR_REQUEST IR LEFT JOIN INSTRUCTOR_REQUEST_PRC IRP" + 
 				" ON IR.REQ_NO = IRP.REQ_NO" + 
-				" WHERE IR.MEM_NO = ? AND PRC_CODE=1";
+				" WHERE IR.MEM_NO = ? AND (PRC_CODE=1 OR PRC_CODE IS NULL)";
 		
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		
@@ -685,7 +706,7 @@ public class MypageMainDAO implements IMypageMainDAO
 
 	}
 	
-	// 6-4. 시군구 리스트(2차 select-AJAX)
+	// 6-4. 시군구 리스트(2차 select)
 	@Override
 	public ArrayList<AreaDTO> areaList(String cno) throws SQLException
 	{
@@ -719,7 +740,7 @@ public class MypageMainDAO implements IMypageMainDAO
 
 	}
 	
-	// 6-5-1. 강사신청 INSERT
+	// 6-5-1. 강사 신청 INSERT
 	@Override
 	public int insReqAdd(String memNo) throws SQLException
 	{
@@ -727,8 +748,8 @@ public class MypageMainDAO implements IMypageMainDAO
 		
 		Connection conn = dataSource.getConnection();
 		
-		String sql = "INSERT INTO INSTRUCTOR_REQUEST(REQ_NO, MEM_NO, REQ_DATE)" 
-					 + " VALUES('IR-' || SEQ_IR.NEXTVAL, ?, SYSDATE)";
+		String sql = "INSERT INTO INSTRUCTOR_REQUEST(REQ_NO, MEM_NO, REQ_DATE)" + 
+					" VALUES('IR-' || SEQ_IR.NEXTVAL, ?, SYSDATE)";
 		
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		pstmt.setString(1, memNo);
@@ -742,55 +763,22 @@ public class MypageMainDAO implements IMypageMainDAO
 		
 	}
 	
-	// 6-6. 강사신청번호 (처리코드가 NULL)
-	@Override
-	public String getInsReqNo(String memNo) throws SQLException
-	{
-		String result = null;		
-		
-		Connection conn = dataSource.getConnection();
-		
-		String sql="SELECT REQ_NO" + 
-					" FROM" + 
-					"    (SELECT REQ_NO" + 
-					"    FROM INSTRUCTOR_REQUEST" + 
-					"    WHERE MEM_NO = ?" + 
-					"    ORDER BY REQ_DATE DESC)" + 
-					" WHERE ROWNUM=1";
-		
-		PreparedStatement pstmt = conn.prepareStatement(sql);
-		
-		pstmt.setString(1, memNo);
-		
-		ResultSet rs = pstmt.executeQuery();
-		
-		while (rs.next())
-		{		
-			result = rs.getString(1);
-		}
-		
-		rs.close();
-		pstmt.close();
-		conn.close();
-		
-		return result;
-	}
-	
 	// 6-5-2. 자격증증명 INSERT
 	@Override
-	public int insCerAdd(InstructorDTO ins, String reqNo) throws SQLException
+	public int insCerAdd(String memNo, String cerNo, String cerDate, String proofPath) throws SQLException
 	{
 		int result = 0;
 		
 		Connection conn = dataSource.getConnection();
 		
 		String sql = "INSERT INTO CERTIFICATE_PROOF(PROOF_NO, REQ_NO, CER_NO, CER_DATE, PROOF_PATH, ADD_DATE)" + 
-					" VALUES('CP-' || SEQ_CP.NEXTVAL, ?, ?, TO_DATE(?, 'YYYY-MM-DD'), 'images/img.jpg', SYSDATE)";
+					" VALUES('CP-' || SEQ_CP.NEXTVAL, FN_RECENTREQ(?), ?, TO_DATE(?, 'YYYY-MM-DD'), ?, SYSDATE)";
 		
 		PreparedStatement pstmt = conn.prepareStatement(sql);
-		pstmt.setString(1, reqNo);
-		pstmt.setString(2, ins.getCerNo());
-		pstmt.setString(3, ins.getCerDate());
+		pstmt.setString(1, memNo);
+		pstmt.setString(2, cerNo);
+		pstmt.setString(3, cerDate);
+		pstmt.setString(4, proofPath);
 		
 		result = pstmt.executeUpdate();
 		
@@ -800,22 +788,23 @@ public class MypageMainDAO implements IMypageMainDAO
 		return result;
 		
 	}
+	
 	// 6-5-3. 수상경력 INSERT
 	@Override
-	public int insPrzAdd(InstructorDTO ins, String reqNo) throws SQLException
+	public int insPrzAdd(String memNo, String przName, String przMedal, String przDate) throws SQLException
 	{
 		int result = 0;
 		
 		Connection conn = dataSource.getConnection();
 		
 		String sql = "INSERT INTO PRIZE(PRZ_NO, REQ_NO, PRZ_NAME, PRZ_MEDAL, PRZ_DATE, ADD_DATE)" + 
-				" VALUES('PRIZE-'|| SEQ_PRIZE.NEXTVAL, ?, ?, ?, ?, SYSDATE)";
+					" VALUES('PRIZE-'|| SEQ_PRIZE.NEXTVAL, FN_RECENTREQ(?), ?, ?, TO_DATE(?, 'YYYY-MM-DD'), SYSDATE)";
 		
 		PreparedStatement pstmt = conn.prepareStatement(sql);
-		pstmt.setString(1, reqNo);
-		pstmt.setString(2, ins.getPrzName());
-		pstmt.setString(3, ins.getPrzMedal());
-		pstmt.setString(4, ins.getPrzDate());
+		pstmt.setString(1, memNo);
+		pstmt.setString(2, przName);
+		pstmt.setString(3, przMedal);
+		pstmt.setString(4, przDate);
 		
 		result = pstmt.executeUpdate();
 		
@@ -825,23 +814,24 @@ public class MypageMainDAO implements IMypageMainDAO
 		return result;
 		
 	}
+	
 	// 6-5-4. 활동경력 INSERT
 	@Override
-	public int insExpAdd(InstructorDTO ins, String reqNo) throws SQLException
+	public int insExpAdd(String memNo, String expContent, String expStartDate, String expEndDate) throws SQLException
 	{
 		int result = 0;
 		
 		Connection conn = dataSource.getConnection();
 		
 		String sql = "INSERT INTO EXPERIENCE(EXP_NO, REQ_NO, EXP_CONTENT, EXP_STARTDATE, EXP_ENDDATE, ADD_DATE)" + 
-				" VALUES('EXPERIENCE-'|| SEQ_EXPERIENCE.NEXTVAL, ?, ?, TO_DATE(?, 'YYYY-MM-DD')" + 
-				" , TO_DATE(?, 'YYYY-MM-DD'), SYSDATE)";
+					" VALUES('EXPERIENCE-'|| SEQ_EXPERIENCE.NEXTVAL, FN_RECENTREQ(?), ?, TO_DATE(?, 'YYYY-MM-DD')" + 
+					", TO_DATE(?, 'YYYY-MM-DD'), SYSDATE)";
 		
 		PreparedStatement pstmt = conn.prepareStatement(sql);
-		pstmt.setString(1, reqNo);
-		pstmt.setString(2, ins.getExpContent());
-		pstmt.setString(3, ins.getExpStartDate());
-		pstmt.setString(4, ins.getExpEndDate());
+		pstmt.setString(1, memNo);
+		pstmt.setString(2, expContent);
+		pstmt.setString(3, expStartDate);
+		pstmt.setString(4, expEndDate);
 		
 		result = pstmt.executeUpdate();
 		
@@ -851,19 +841,20 @@ public class MypageMainDAO implements IMypageMainDAO
 		return result;
 		
 	}
+	
 	// 6-5-5. 활동지역 INSERT
 	@Override
-	public int insAreaAdd(String reqNo, String sigunguNo) throws SQLException
+	public int insAreaAdd(String memNo, String sigunguNo) throws SQLException
 	{
 		int result = 0;
 		
 		Connection conn = dataSource.getConnection();
 		
 		String sql = "INSERT INTO INSTRUCTOR_AREA(AREA_NO, REQ_NO, SIGUNGU_NO, ADD_DATE)" + 
-				" VALUES('IA-' || SEQ_IA.NEXTVAL, ?, ?, SYSDATE";
+					" VALUES('IA-' || SEQ_IA.NEXTVAL, FN_RECENTREQ(?), ?, SYSDATE)";
 		
 		PreparedStatement pstmt = conn.prepareStatement(sql);
-		pstmt.setString(1, reqNo);
+		pstmt.setString(1, memNo);
 		pstmt.setString(2, sigunguNo);
 		
 		result = pstmt.executeUpdate();
@@ -874,4 +865,5 @@ public class MypageMainDAO implements IMypageMainDAO
 		return result;
 		
 	}
+	
 }

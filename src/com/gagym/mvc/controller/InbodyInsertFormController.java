@@ -15,7 +15,7 @@ public class InbodyInsertFormController implements Controller
 	{
 		ModelAndView mav = new ModelAndView();
 		
-		mav.setViewName("/WEB-INF/view/InbodyInsertForm.jsp");		
+		mav.setViewName("/WEB-INF/myPageView/InbodyInsertForm.jsp");		
 			
 		return mav;
 	}

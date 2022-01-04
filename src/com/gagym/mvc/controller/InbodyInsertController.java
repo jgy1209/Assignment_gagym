@@ -3,6 +3,7 @@ package com.gagym.mvc.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
@@ -25,8 +26,10 @@ public class InbodyInsertController implements Controller
 	{
 		ModelAndView mav = new ModelAndView();
 		
-		//  체중	키	골격근	체지방	체지방률
-		String memNo = request.getParameter("memNo");
+		HttpSession session = request.getSession();
+		
+		
+		String memNo = (String)session.getAttribute("memNo");
 		Double weight = Double.parseDouble(request.getParameter("weight"));
 		Double tall = Double.parseDouble(request.getParameter("tall"));
 		Double muscle = Double.parseDouble(request.getParameter("muscle"));
