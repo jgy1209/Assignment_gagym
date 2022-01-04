@@ -68,7 +68,7 @@ public class InstructorInsertController implements Controller
 			for(int c=0; c<cerNo.length; c++)
 			{
 				if(!cerNo[c].equals("") && !cerDate[c].equals("") && !proofPath.equals(""))
-					dao.insCerAdd(memNo, cerNo[c], cerDate[c], "upload/certificateProof/" + proofPath);
+					dao.insCerAdd(memNo, cerNo[c], cerDate[c], "http://localhost:8090/Final/upload/certificateProof/" + proofPath);
 			}
 			
 			// 수상경력

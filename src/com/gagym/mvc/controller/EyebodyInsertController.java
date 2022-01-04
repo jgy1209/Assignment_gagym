@@ -46,7 +46,7 @@ public class EyebodyInsertController implements Controller
 			EyebodyDTO eyebody = new EyebodyDTO();
 			
 			eyebody.setMemNo(memNo);
-			eyebody.setPhotoPath("upload/eyebody/" + photoPath);
+			eyebody.setPhotoPath("http://localhost:8090/Final/upload/eyebody/" + photoPath);
 			
 			dao.eyebodyAdd(eyebody);
 			
