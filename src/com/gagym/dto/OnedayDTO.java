@@ -5,32 +5,15 @@ public class OnedayDTO
 	// 회원번호, 회원명, 회원아이디, 주소(지역), 종목명, 운동희망날짜
 	private String memNo, memName, memId, addr, sportName, wishDate;
 	
-	// 등록날짜, 제목, 내용, 중도폐쇄날짜, 강사확정날짜, 원데이번호
-	private String regDate, title, content, stopDate, fixDate, onedayNo;
+	// 등록날짜, 제목, 내용, 중도폐쇄날짜, 강사확정날짜, 원데이번호, 기간만료체크
+	private String regDate, title, content, stopDate, fixDate, onedayNo, dateCheck;
 	
-	// 희망아령, 희망첫타임, 희망마지막타임
+	// 희망아령, 희망첫타임, 희망마지막타임 - 리스트 출력
 	private int wishPoint, startTime, endTime;
-
 	
-	public String getOnedayNo()
-	{
-		return onedayNo;
-	}
-
-	public void setOnedayNo(String onedayNo)
-	{
-		this.onedayNo = onedayNo;
-	}
-
-	public String getTitle()
-	{
-		return title;
-	}
-
-	public void setTitle(String title)
-	{
-		this.title = title;
-	}
+	// 종목번호, 희망첫타임 번호, 희망마지막타임 번호 - 등록
+	private String sportNo, startTimeNo, endTimeNo;
+	
 
 	public String getMemNo()
 	{
@@ -102,6 +85,16 @@ public class OnedayDTO
 		this.regDate = regDate;
 	}
 
+	public String getTitle()
+	{
+		return title;
+	}
+
+	public void setTitle(String title)
+	{
+		this.title = title;
+	}
+
 	public String getContent()
 	{
 		return content;
@@ -130,6 +123,26 @@ public class OnedayDTO
 	public void setFixDate(String fixDate)
 	{
 		this.fixDate = fixDate;
+	}
+
+	public String getOnedayNo()
+	{
+		return onedayNo;
+	}
+
+	public void setOnedayNo(String onedayNo)
+	{
+		this.onedayNo = onedayNo;
+	}
+
+	public String getDateCheck()
+	{
+		return dateCheck;
+	}
+
+	public void setDateCheck(String dateCheck)
+	{
+		this.dateCheck = dateCheck;
 	}
 
 	public int getWishPoint()
@@ -161,4 +174,36 @@ public class OnedayDTO
 	{
 		this.endTime = endTime;
 	}
+
+	public String getSportNo()
+	{
+		return sportNo;
+	}
+
+	public void setSportNo(String sportNo)
+	{
+		this.sportNo = sportNo;
+	}
+
+	public String getStartTimeNo()
+	{
+		return startTimeNo;
+	}
+
+	public void setStartTimeNo(String startTimeNo)
+	{
+		this.startTimeNo = startTimeNo;
+	}
+
+	public String getEndTimeNo()
+	{
+		return endTimeNo;
+	}
+
+	public void setEndTimeNo(String endTimeNo)
+	{
+		this.endTimeNo = endTimeNo;
+	}
+
+	
 }
