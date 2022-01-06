@@ -100,15 +100,13 @@ $(document).ready (function () {
    $("#cityName1").change(function()
    {
 	  $("#sigunguName1").html(""); 
-	  
-      var params = "cityNo=" + $("#cityName1 > option:selected").val();
       
       $.ajax(
       {
           url: "areaajax.action"
-          , type: "POST"
+          , type: "GET"
           , data: {cityNo: $("#cityName1 > option:selected").val()}
-         , dataType: "text"
+          , dataType: "html"
           , success : function(data)
          {    
         	 $("#sigunguName1").html("<option value=\"\">-선택하세요-</option>" + data); 
@@ -123,15 +121,13 @@ $(document).ready (function () {
    $("#cityName2").change(function()
    {
 	  $("#sigunguName2").html(""); 
-	   
-      var params = "cityNo=" + $("#cityName2 > option:selected").val();
        
       $.ajax(
       {
           url: "areaajax.action"
-          , type: "POST"
+          , type: "GET"
           , data: {cityNo: $("#cityName2 > option:selected").val()}
-         , dataType: "text"
+          , dataType: "html"
           , success : function(data)
          {       
         	  $("#sigunguName2").html("<option value=\"\">-선택하세요-</option>" + data); 
@@ -147,15 +143,13 @@ $(document).ready (function () {
    $("#cityName3").change(function()
    {
 	  $("#sigunguName3").html(""); 
-	   
-      var params = "cityNo=" + $("#cityName3 > option:selected").val();
        
       $.ajax(
       {
           url: "areaajax.action"
-          , type: "POST"
+          , type: "GET"
           , data: {cityNo: $("#cityName3 > option:selected").val()}
-         , dataType: "text"
+         , dataType: "html"
           , success : function(data)
          {       
         	  $("#sigunguName3").html("<option value=\"\">-선택하세요-</option>" + data); 
