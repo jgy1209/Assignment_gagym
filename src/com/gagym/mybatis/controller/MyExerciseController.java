@@ -118,4 +118,20 @@ public class MyExerciseController
 		return "redirect:myexerciseoneday.action";
 		
 	}
+	
+	// 2-4. 원데이 게시글 상세 조회
+	@RequestMapping(value="/onedaycontent.action", method = RequestMethod.GET)
+	public String onedayContent(Model model, String onedayNo)
+	{
+		IMyExerciseOnedayDAO dao = sqlSession.getMapper(IMyExerciseOnedayDAO.class);
+		
+		OnedayDTO oneday = new OnedayDTO();
+		
+		oneday = dao.onedayContent(onedayNo);
+		
+		model.addAttribute("oneday", oneday);
+		model.addAttribute("member", dao.onedayPrivacy(oneday.getMemNo()));		// 게시글의 memNo를 이용하여 개인정보 출력
+		
+		return "/WEB-INF/myExerciseView/OnedayContent.jsp";
+	}
 }

@@ -130,7 +130,7 @@
 								<li class="nav-item"><a class="nav-link" href="main.action">Home</a></li>
 								<li class="nav-item"><a class="nav-link" href="#">강좌</a></li>
 								<li class="nav-item"><a class="nav-link" href="#">원데이클래스</a></li>
-								<li class="nav-item"><a class="nav-link" href="#">게시판</a></li>
+								<li class="nav-item"><a class="nav-link" href="myexercise.action">나의운동</a></li>
 								<li class="nav-item"><a class="nav-link" href="#">고객센터</a></li>
 							</ul>
 						</div>

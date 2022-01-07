@@ -34,11 +34,11 @@ public class MainListController implements Controller
 		try
 		{
 			
-			  onedayList = dao.onedayList();
+			  //onedayList = dao.onedayList();
 			  classList = dao.classList();
 			  insList = dao.insList();
 			  
-			  mav.addObject("onedayList", onedayList);
+			  //mav.addObject("onedayList", onedayList);
 			  mav.addObject("classList", classList);
 			  mav.addObject("insList", insList);
 			  

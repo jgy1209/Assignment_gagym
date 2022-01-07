@@ -64,7 +64,7 @@ public class MainDAO implements IMainDAO
 		
 		return result;
 	}
-	
+	/*
 	//원데이클래스 리스트 (최신순 10개)
 	@Override
 	public ArrayList<OnedayDTO> onedayList() throws SQLException
@@ -75,9 +75,9 @@ public class MainDAO implements IMainDAO
 		
 		String sql = "SELECT ONEDAY_NAME, TO_CHAR(ONEDAY_WISH_DATE, 'YYYY-MM-DD') AS WISHDATE,"
 				+ " START_TIME, END_TIME, SPORT_NAME, ONEDAY_WISH_POINT,"
-				+ " ADDR, MEM_NAME, ONEDAY_NO FROM ("
+				+ " ADDR, ONEDAY_NO FROM ("
 				+ " SELECT ONEDAY_NAME, ONEDAY_WISH_DATE, START_TIME,"
-				+ " END_TIME, SPORT_NAME, ONEDAY_WISH_POINT, ADDR, MEM_NAME, MEM_NO,"
+				+ " END_TIME, SPORT_NAME, ONEDAY_WISH_POINT, ADDR, MEM_NO,"
 				+ " ONEDAY_NO FROM ONEDAYVIEW WHERE ONEDAY_FIX_DATE IS NULL ORDER BY ONEDAY_REG_DATE DESC )"
 				+ " WHERE ROWNUM <= 10";
 		
@@ -95,7 +95,7 @@ public class MainDAO implements IMainDAO
 			oneday.setSportName(rs.getString("SPORT_NAME"));
 			oneday.setWishPoint(rs.getInt("ONEDAY_WISH_POINT"));
 			oneday.setAddr(rs.getString("ADDR"));
-			oneday.setMemName(rs.getString("MEM_NAME"));
+			//oneday.setMemName(rs.getString("MEM_NAME"));
 			oneday.setOnedayNo(rs.getString("ONEDAY_NO"));
 			//oneday.setOnedayNo(rs.getString("ONEDAY_NO"));
 			
@@ -107,7 +107,7 @@ public class MainDAO implements IMainDAO
 		
 		return result;
 	}
-
+*/
 	//강사리스트(이름만 최신 10명)
 	@Override
 	public ArrayList<InstructorDTO> insList() throws SQLException

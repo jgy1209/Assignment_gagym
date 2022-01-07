@@ -9,7 +9,7 @@ import com.gagym.dto.OnedayDTO;
 
 public interface IMainDAO
 {
-	public ArrayList<OnedayDTO> onedayList() throws SQLException;
+	//public ArrayList<OnedayDTO> onedayList() throws SQLException;
 	public ArrayList<ClassDTO> classList() throws SQLException;
 	public ArrayList<InstructorDTO> insList() throws SQLException;
 }
