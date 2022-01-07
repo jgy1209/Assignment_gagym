@@ -36,8 +36,13 @@
 	
 	$(function()
 	{ 
+		// 게시글 이동
+		$(".onedayContent").click(function()
+		{
+			$(location).attr("href", "onedaycontent.action?onedayNo=" + $(this).children().val());
+		});
 		// 신청목록 버튼
-		$(".onedayRsv").click(function()
+		$(".onedayRsvList").click(function()
 		{
 			$(location).attr("href", "myonedayreservation.action?onedayNo=" + $(this).val());
 		});
@@ -79,14 +84,15 @@
 			
 				<c:forEach var="oneday" items="${onedayList }">
 					<tr>
-						<td>${oneday.title }</td>
+						<!-- 게시글 링크 이동 -->
+						<td class="onedayContent" style="cursor: pointer;"><input type="hidden"  value="${oneday.onedayNo }"/>${oneday.title }</td>
 						<td>${oneday.sportName }</td>
 						<td>${oneday.wishDate }</td>
 						<td>${oneday.startTime }:00~${oneday.endTime }:00</td>
 						<td>${oneday.wishPoint }</td>
 						<td>${oneday.regDate }</td>
 						<td>
-							<button type="button" class="btn btn-info onedayRsv" value="${oneday.onedayNo }" 
+							<button type="button" class="btn btn-info onedayRsvList" value="${oneday.onedayNo }" 
 							style="${oneday.dateCheck=='기간만료'? 'display:none' : (oneday.fixDate!=null? 'display:none' : '') } ">신청목록</button> 
 							<button type="button" class="btn btn-danger onedayDelete" value="${oneday.onedayNo }" 
 							style="${oneday.dateCheck=='기간만료'? 'display:none' : (oneday.fixDate!=null? 'display:none' : '') } ">삭제</button> 

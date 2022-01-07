@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import com.gagym.dto.MemberDTO;
 import com.gagym.dto.OnedayDTO;
+import com.gagym.dto.OnedayReservationDTO;
+import com.gagym.dto.ReportDTO;
 import com.gagym.dto.SportDTO;
 import com.gagym.dto.TimeDTO;
 
@@ -31,4 +33,12 @@ public interface IMyExerciseOnedayDAO
 	
 	
 	public int onedayRemove(String onedayNo);
+	
+	
+	public int onedayRsvAdd(OnedayReservationDTO dto);
+	
+	
+	public ArrayList<ReportDTO> reasonList();
+	
+	public int onedayReportAdd(ReportDTO dto);
 }

@@ -49,7 +49,26 @@
 			dateFormat: "yy-mm-dd"
 			, changeMonth: true
 			, changeYear: true
+			, minDate: 4
+			, maxDate: 30
 	   	});
+		
+		// startTime 바뀌면 endTime 자동으로 startTime과 동일하게 변경
+		$("#startTimeNo").change(function()
+		{
+			$("#endTimeNo").val($("#startTimeNo option:selected").val());
+		});
+		
+		// 마지막 타임이 시작 타임보다 빠르지 않도록 제한
+		$("#endTimeNo").change(function()
+		{
+			if($("#startTimeNo option:selected").val() > $("#endTimeNo option:selected").val())
+			{
+				alert("희망 마지막 타임이 희망 시작 타임보다 빠를 수 없습니다.");
+				$("#endTimeNo").val($("#startTimeNo option:selected").val());
+			}
+		});
+		
 	});
 
 </script>
@@ -91,13 +110,13 @@
 							<input type="text" name="wishDate" class="form-control col-md-4 datepicker" placeholder="희망날짜" style="width:150px;" required="required" >
 							
 							<label for="start-endTimeNo" class="col-md-2">희망타임범위</label>
-							<select name="startTimeNo" class="form-control col-md-2" style="width:150px;" required="required" >
+							<select id="startTimeNo" name="startTimeNo" class="form-control col-md-2" style="width:150px;" required="required" >
 								<c:forEach var="time" items="${timeList }">
 									<option value="${time.timeNo }">${time.startTime }:00 ~ ${time.endTime }:00</option>
 								</c:forEach>
 							</select>
 							~
-							<select name="endTimeNo" class="form-control col-md-2"  style="width:150px;" required="required" >
+							<select id="endTimeNo" name="endTimeNo" class="form-control col-md-2"  style="width:150px;" required="required" >
 								<c:forEach var="time" items="${timeList }">
 									<option value="${time.timeNo }">${time.startTime }:00 ~ ${time.endTime }:00</option>
 								</c:forEach>
@@ -106,8 +125,8 @@
 						</div>
 						<br>
 						<div class="form-group row">
-							<label for="title" class="col-md-2">희망아령개수</label>
-							<input type="text" id="wishPoint" name="wishPoint" required="required" class="form-control" style="width:200px;" required="required" />
+							<label for="wishPoint" class="col-md-2">희망아령개수</label>
+							<input type="number" min=0 id="wishPoint" name="wishPoint" required="required" class="form-control" style="width:200px;" required="required" />
 						</div>
 						<br>
 						<div class="form-group row">

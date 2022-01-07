@@ -2,16 +2,15 @@ package com.gagym.dto;
 
 public class OnedayReservationDTO
 {
-	// 강사번호, 강사명, 강사아이디, 활동지역, 진행중인 강좌, 구직신청번호
-	private String insNo, insName, insId, area, title, rsvNo;
+	// 강사번호, 강사명, 강사아이디, 활동지역, 진행중인 강좌, 구직신청번호, 원데이번호
+	private String insNo, insName, insId, area, title, rsvNo, onedayNo;
 	
-	// 신청날짜, 확정날짜
-	private String reqDate, fixDate;
+	// 신청날짜, 확정날짜, 제안 타임 번호
+	private String reqDate, fixDate, reqTimeNo;
 	
 	// 제안 아령, 제안 타임
 	private int reqPoint, reqTime;
 
-	
 	public String getInsNo()
 	{
 		return insNo;
@@ -62,6 +61,26 @@ public class OnedayReservationDTO
 		this.title = title;
 	}
 
+	public String getRsvNo()
+	{
+		return rsvNo;
+	}
+
+	public void setRsvNo(String rsvNo)
+	{
+		this.rsvNo = rsvNo;
+	}
+
+	public String getOnedayNo()
+	{
+		return onedayNo;
+	}
+
+	public void setOnedayNo(String onedayNo)
+	{
+		this.onedayNo = onedayNo;
+	}
+
 	public String getReqDate()
 	{
 		return reqDate;
@@ -80,6 +99,16 @@ public class OnedayReservationDTO
 	public void setFixDate(String fixDate)
 	{
 		this.fixDate = fixDate;
+	}
+
+	public String getReqTimeNo()
+	{
+		return reqTimeNo;
+	}
+
+	public void setReqTimeNo(String reqTimeNo)
+	{
+		this.reqTimeNo = reqTimeNo;
 	}
 
 	public int getReqPoint()
@@ -102,14 +131,4 @@ public class OnedayReservationDTO
 		this.reqTime = reqTime;
 	}
 
-	public String getRsvNo()
-	{
-		return rsvNo;
-	}
-
-	public void setRsvNo(String rsvNo)
-	{
-		this.rsvNo = rsvNo;
-	}
-	
 }
