@@ -34,11 +34,4 @@ public interface IMyExerciseOnedayDAO
 	
 	public int onedayRemove(String onedayNo);
 	
-	
-	public int onedayRsvAdd(OnedayReservationDTO dto);
-	
-	
-	public ArrayList<ReportDTO> reasonList();
-	
-	public int onedayReportAdd(ReportDTO dto);
 }

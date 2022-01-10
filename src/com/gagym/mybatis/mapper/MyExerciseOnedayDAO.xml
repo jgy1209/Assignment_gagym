@@ -93,24 +93,4 @@
 		WHERE ONEDAY_NO = #{onedayNo}
 	</delete>
 	
-	
-	
-	<!-- 강사 원데이 구직신청 -->
-	<insert id="onedayRsvAdd">
-		INSERT INTO ONEDAY_RESERVATION(ONEDAY_RSV_NO, ONEDAY_NO, INS_NO, TIME_NO, REQ_POINT, ONEDAY_RSV_DATE)
-		VALUES('OR-'||SEQ_OR.NEXTVAL, #{onedayNo}, #{insNo}, #{reqTimeNo}, #{reqPoint}, SYSDATE)
-	</insert>
-	
-	
-	<!-- 원데이 신고 -->
-	<!-- SELECTBOX - 신고사유목록 -->
-	<select id="reasonList" resultType="com.gagym.dto.ReportDTO">
-		SELECT REP_REASON_NO AS REPREASONNO, REP_REASON AS REPREASON
-		FROM REPORT_REASON ORDER BY 1
-	</select>
-	
-	<insert id="onedayReportAdd">
-		{call PRC_ONEDAY_POST_REPORT_INSERT(#{repNo}, #{prmemNo}, #{repReasonNo}, #{repOther})}
-	</insert>
-	
 </mapper>
