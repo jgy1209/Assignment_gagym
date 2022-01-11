@@ -13,8 +13,6 @@ import com.gagym.dto.InstructorDTO;
 import com.gagym.dto.OnedayDTO;
 import com.gagym.mvc.inter.IMainDAO;
 
-
-
 public class MainDAO implements IMainDAO
 {
 	private DataSource dataSource;
@@ -34,9 +32,9 @@ public class MainDAO implements IMainDAO
 		
 		String sql = "SELECT CLASS_NO, CLASS_NAME, TO_CHAR(CLASS_STARTDATE, 'YYYY-MM-DD') AS CLASS_STARTDATE,"
 				+ " TO_CHAR(CLASS_ENDDATE, 'YYYY-MM-DD') AS CLASS_ENDDATE,"
-				+ " CLASS_POINT, SPORT_NAME, INS_NAME, INS_AREA"
+				+ " CLASS_POINT, SPORT_NAME, INS_NAME, INS_ID, INS_AREA"
 				+ " FROM ( SELECT CLASS_NO, CLASS_NAME, CLASS_STARTDATE, CLASS_ENDDATE,"
-				+ " CLASS_POINT, CLASS_DATE, SPORT_NAME, INS_NAME, INS_AREA"
+				+ " CLASS_POINT, CLASS_DATE, SPORT_NAME, INS_NAME, INS_ID, INS_AREA"
 				+ " FROM CLASSVIEW ORDER BY CLASS_DATE DESC )"
 				+ " WHERE ROWNUM <= 10";
 		
@@ -51,9 +49,10 @@ public class MainDAO implements IMainDAO
 			classes.setClassName(rs.getString("CLASS_NAME"));
 			classes.setStartDate(rs.getString("CLASS_STARTDATE"));
 			classes.setEndDate(rs.getString("CLASS_ENDDATE"));
-			classes.setPoint(rs.getString("CLASS_POINT"));
+			classes.setPoint(rs.getInt("CLASS_POINT"));
 			classes.setSportName(rs.getString("SPORT_NAME"));
 			classes.setInsName(rs.getString("INS_NAME"));
+			classes.setInsId(rs.getString("INS_ID"));			
 			classes.setInsArea(rs.getString("INS_AREA"));
 			
 			result.add(classes);
@@ -64,7 +63,7 @@ public class MainDAO implements IMainDAO
 		
 		return result;
 	}
-	/*
+	
 	//원데이클래스 리스트 (최신순 10개)
 	@Override
 	public ArrayList<OnedayDTO> onedayList() throws SQLException
@@ -73,13 +72,14 @@ public class MainDAO implements IMainDAO
 		
 		Connection conn = dataSource.getConnection();
 		
-		String sql = "SELECT ONEDAY_NAME, TO_CHAR(ONEDAY_WISH_DATE, 'YYYY-MM-DD') AS WISHDATE,"
-				+ " START_TIME, END_TIME, SPORT_NAME, ONEDAY_WISH_POINT,"
-				+ " ADDR, ONEDAY_NO FROM ("
-				+ " SELECT ONEDAY_NAME, ONEDAY_WISH_DATE, START_TIME,"
-				+ " END_TIME, SPORT_NAME, ONEDAY_WISH_POINT, ADDR, MEM_NO,"
-				+ " ONEDAY_NO FROM ONEDAYVIEW WHERE ONEDAY_FIX_DATE IS NULL ORDER BY ONEDAY_REG_DATE DESC )"
-				+ " WHERE ROWNUM <= 10";
+		String sql = "SELECT O.MEM_NO AS MEM_NO, P.MEM_NAME AS MEM_NAME, P.MEM_ID AS MEM_ID,"
+				+ " P.ADDR AS ADDR, O.ONEDAY_NAME AS ONEDAY_NAME,"
+				+ " TO_CHAR(O.ONEDAY_WISH_DATE, 'YYYY-MM-DD') AS WISH_DATE,"
+				+ " O.START_TIME AS START_TIME, O.END_TIME AS END_TIME, O.SPORT_NAME AS SPORT_NAME,"
+				+ " O.ONEDAY_WISH_POINT AS WISH_POINT, O.ONEDAY_NO AS ONEDAY_NO"
+				+ " FROM ONEDAYVIEW O LEFT JOIN PRIVACY P ON O.MEM_NO = P.MEM_NO"
+				+ " WHERE O.ONEDAY_FIX_DATE IS NULL AND ROWNUM <= 10"
+				+ " ORDER BY O.ONEDAY_REG_DATE DESC";
 		
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		ResultSet rs = pstmt.executeQuery();
@@ -88,16 +88,17 @@ public class MainDAO implements IMainDAO
 		{
 			OnedayDTO oneday = new OnedayDTO();
 			
+			oneday.setMemNo(rs.getString("MEM_NO"));
+			oneday.setMemName(rs.getString("MEM_NAME"));
+			oneday.setMemId(rs.getString("MEM_ID"));			
+			oneday.setAddr(rs.getString("ADDR"));
 			oneday.setTitle(rs.getString("ONEDAY_NAME"));
-			oneday.setWishDate(rs.getString("WISHDATE"));
+			oneday.setWishDate(rs.getString("WISH_DATE"));
 			oneday.setStartTime(rs.getInt("START_TIME"));
 			oneday.setEndTime(rs.getInt("END_TIME"));
 			oneday.setSportName(rs.getString("SPORT_NAME"));
-			oneday.setWishPoint(rs.getInt("ONEDAY_WISH_POINT"));
-			oneday.setAddr(rs.getString("ADDR"));
-			//oneday.setMemName(rs.getString("MEM_NAME"));
+			oneday.setWishPoint(rs.getInt("WISH_POINT"));
 			oneday.setOnedayNo(rs.getString("ONEDAY_NO"));
-			//oneday.setOnedayNo(rs.getString("ONEDAY_NO"));
 			
 			result.add(oneday);
 		}
@@ -107,38 +108,15 @@ public class MainDAO implements IMainDAO
 		
 		return result;
 	}
-*/
-	//강사리스트(이름만 최신 10명)
+
 	@Override
 	public ArrayList<InstructorDTO> insList() throws SQLException
 	{
-		ArrayList<InstructorDTO> result = new ArrayList<InstructorDTO>();
-		
-		Connection conn = dataSource.getConnection();
-		
-		String sql = "SELECT INS_NAME"
-				+ " FROM"
-				+ " ( SELECT INS_NO, INS_NAME, PRC_DATE"
-				+ " FROM INSPRIVACYVIEW"
-				+ " ORDER BY PRC_DATE DESC )"
-				+ " WHERE ROWNUM <= 10";
-		
-		PreparedStatement pstmt = conn.prepareStatement(sql);
-		ResultSet rs = pstmt.executeQuery();
-		
-		while (rs.next())
-		{
-			InstructorDTO ins = new InstructorDTO();
-			
-			ins.setInsName(rs.getString("INS_NAME"));
-
-			result.add(ins);
-		}
-		rs.close();
-		pstmt.close();
-		conn.close();
-		
-		return result;
+		// TODO Auto-generated method stub
+		return null;
 	}
+	
+
+
 
 }

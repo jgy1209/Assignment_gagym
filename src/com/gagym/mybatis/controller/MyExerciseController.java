@@ -9,9 +9,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.gagym.dto.ClassReservationDTO;
 import com.gagym.dto.OnedayDTO;
-import com.gagym.dto.OnedayReservationDTO;
-import com.gagym.dto.ReportDTO;
+import com.gagym.mybatis.inter.IMyExerciseClassDAO;
 import com.gagym.mybatis.inter.IMyExerciseOnedayDAO;
 
 
@@ -116,7 +116,6 @@ public class MyExerciseController
 		return "/WEB-INF/myPageView/Alert.jsp";
 	}
 	
-	
 	// 2-3. 나의 원데이클래스 - 삭제
 	@RequestMapping(value = "/onedaydelete.action", method = RequestMethod.GET)
 	public String onedayDelete(String onedayNo)
@@ -129,4 +128,20 @@ public class MyExerciseController
 		
 	}
 	
+	
+	// 3. 나의 강좌 - 수강신청 목록
+	@RequestMapping(value = "/myexerciseclass.action", method = RequestMethod.GET)
+	public String myExerciseClass(HttpSession session, Model model)
+	{		
+		String memNo = (String)session.getAttribute("memNo");
+		
+		IMyExerciseClassDAO dao = sqlSession.getMapper(IMyExerciseClassDAO.class);
+		
+		dao.autoReject();
+		
+		model.addAttribute("classList", dao.myExerciseClass(memNo));
+		
+		return "/WEB-INF/myExerciseView/MyExerciseClass.jsp";
+		
+	}
 }
