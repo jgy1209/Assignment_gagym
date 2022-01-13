@@ -45,4 +45,74 @@
 	</insert>
 	
 	
+	<!-- 취소 후 환불가능 여부 -->
+	<select id="cnlCheck" resultType="java.lang.String">
+		SELECT CASE WHEN (RSV_DATE-2 <![CDATA[<]]> SYSDATE) THEN '아령환불불가취소' ELSE '아령환불가능취소' END AS CNLCHECK
+		FROM CLASS_RESERVATION
+		WHERE CLASS_RSV_NO = #{classRsvNo}
+	</select>
+	
+	<!-- 예약취소 -->
+	<insert id="classCancel">
+		INSERT INTO CLASS_RESERVATION_CANCEL(CLASS_RSV_CNL_NO, CLASS_RSV_NO, MEMTYPE_NO, CNL_DATE, CNL_REASON)
+		VALUES('CRC-'|| SEQ_CRC.NEXTVAL, #{classRsvNo}, 'MEMTYPE-1', SYSDATE, #{cnlReason})
+	</insert>
+	
+	
+	<!-- 수강확정 -->
+	<insert id="classComplete">
+		INSERT INTO CLASS_COMPLETE(CLASS_COM_NO, CLASS_RSV_NO, CLASS_COM_DATE)
+		VALUES('CC-'|| SEQ_CC.NEXTVAL, #{classRsvNo}, SYSDATE)
+	</insert>
+	
+	
+	<!-- 리뷰 작성 -->
+	<insert id="classReviewAdd">
+		INSERT INTO REVIEW(REVIEW_NO, CLASS_COM_NO, REVIEW_CONTENT, GRADE, REVIEW_DATE)
+		VALUES('REVIEW-'||SEQ_REVIEW.NEXTVAL, #{classComNo}, #{reviewContent}, #{grade}, SYSDATE)
+	</insert>
+	
+	<!-- 작성할 리뷰의 클래스 정보 -->
+	<select id="classInfo" resultType="com.gagym.dto.ReviewDTO">
+		SELECT P.MEM_NAME AS INSNAME, P.MEM_ID AS INSID, C.CLASS_NAME AS CLASSNAME
+		FROM CLASS_COMPLETE CC LEFT JOIN CLASS_RESERVATION CR
+		ON CC.CLASS_RSV_NO = CR.CLASS_RSV_NO
+		        LEFT JOIN CLASS C
+		        ON CR.CLASS_NO = C.CLASS_NO
+		        LEFT JOIN PRIVACY P
+		        ON FN_MEM_NO(C.INS_NO) = P.MEM_NO
+		WHERE CC.CLASS_COM_NO = #{classComNo}
+	</select>
+	
+	<!-- 리뷰 보기 -->
+	<select id="classReview" resultType="com.gagym.dto.ReviewDTO">
+		SELECT R.GRADE AS GRADE, R.REVIEW_CONTENT AS REVIEWCONTENT, R.REVIEW_DATE AS REVIEWDATE
+		     , P.MEM_NAME AS INSNAME, P.MEM_ID AS INSID, C.CLASS_NAME AS CLASSNAME
+		FROM REVIEW R LEFT JOIN CLASS_COMPLETE CC
+		ON R.CLASS_COM_NO = CC.CLASS_COM_NO
+		        LEFT JOIN CLASS_RESERVATION CR
+		        ON CC.CLASS_RSV_NO = CR.CLASS_RSV_NO
+		        LEFT JOIN CLASS C
+		        ON CR.CLASS_NO = C.CLASS_NO
+		        LEFT JOIN PRIVACY P
+		        ON FN_MEM_NO(C.INS_NO) = P.MEM_NO
+		WHERE REVIEW_NO=#{reviewNo}
+	</select>
+	
+	
+	<!-- 작성할 분쟁조정의 클래스 정보 -->
+	<select id="classInfo2" resultType="com.gagym.dto.ClassReservationDTO">
+		SELECT P.MEM_NAME AS INSNAME, P.MEM_ID AS INSID, C.CLASS_NAME AS TITLE, TO_CHAR(CR.RSV_DATE, 'YYYY-MM-DD') AS RSVDATE
+		FROM CLASS_RESERVATION CR LEFT JOIN CLASS C
+		ON CR.CLASS_NO = C.CLASS_NO
+		        LEFT JOIN PRIVACY P
+		        ON FN_MEM_NO(C.INS_NO) = P.MEM_NO
+		WHERE CR.CLASS_RSV_NO = #{classRsvNo}
+	</select>
+	
+	<!-- 분쟁조정 신청 -->
+	<insert id="classDisputeAdd">
+		INSERT INTO CLASS_DISPUTE(CLASS_DIS_NO, MEM_NO, CLASS_RSV_NO, CLASS_DIS_TITLE, CLASS_DIS_DATE, CLASS_DIS_CONTENT, CLASS_DIS_PATH)
+		VALUES('CD-'||SEQ_CD.NEXTVAL, #{memNo}, #{classRsvNo}, #{classDisTitle}, SYSDATE, #{classDisContent}, #{classDisPath})
+	</insert>
 </mapper>

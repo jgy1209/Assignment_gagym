@@ -59,7 +59,7 @@ public class OnedayBoardController
 			model.addAttribute("msg","로그인 후 이용가능합니다.");
 			model.addAttribute("url","login.action");
 			
-			return "/WEB-INF/myPageView/Alert.jsp";
+			return "/WEB-INF/mainView/Alert.jsp";
 		}
 		
 		IMyExerciseOnedayDAO dao = sqlSession.getMapper(IMyExerciseOnedayDAO.class);
@@ -86,7 +86,7 @@ public class OnedayBoardController
 			model.addAttribute("msg","회원님은 강사권한이 없습니다.");
 			model.addAttribute("url","onedaycontent.action?onedayNo=" + onedayNo);
             
-            return "/WEB-INF/myPageView/Alert.jsp";
+            return "/WEB-INF/mainView/Alert.jsp";
 		}
 		
 		IMyExerciseOnedayDAO dao = sqlSession.getMapper(IMyExerciseOnedayDAO.class);
@@ -120,7 +120,7 @@ public class OnedayBoardController
 		model.addAttribute("msg","구직신청이 완료되었습니다.");
 		model.addAttribute("url","main.action");
 		
-		return "/WEB-INF/onedayView/Alert.jsp";
+		return "/WEB-INF/mainView/Alert.jsp";
 	}
 	
 	// 3-1. 원데이 신고 폼

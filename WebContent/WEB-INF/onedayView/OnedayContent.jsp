@@ -5,6 +5,7 @@
 	String cp = request.getContextPath();
 	
 	String memNo = (String)session.getAttribute("memNo");
+	String insNo = (String)session.getAttribute("insNo");
 %>
 <!DOCTYPE html>
 <html>
@@ -151,7 +152,7 @@
 					
 					<div>
 						<button type="button" class="btn btn-info onedayRsvInsertForm" value="${oneday.onedayNo }" 
-						style="${memNo==oneday.memNo? 'display:none' : '' } ">신청하기</button> 
+						style="${memNo==oneday.memNo? 'display:none' : (insNo==null?'display:none':oneday.dateCheck=='기간만료'?'display:none':'') } ">신청하기</button> 
 						<button type="button" class="btn btn-danger onedayReportForm" value="${oneday.onedayNo }" 
 						style="${memNo==oneday.memNo? 'display:none' : '' }">신고</button> 
 						<button type="button" class="btn btn-danger onedayDelete" value="${oneday.onedayNo }" 

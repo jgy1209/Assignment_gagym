@@ -7,17 +7,18 @@ package com.gagym.dto;
 
 public class ReviewDTO
 {
-	// 강좌 번호, 강좌명, 강사 번호
-	private String classNo, className, insNo;
+	// 강좌 번호, 강좌명, 강사 번호, 강사아이디, 강사이름
+	private String classNo, className, insNo, insId, insName;
 	
-	// 리뷰, 리뷰 날짜
-	private String reviewContent, reviewDate;
+	// 강좌완료번호, 리뷰, 리뷰 날짜
+	private String classComNo, reviewContent, reviewDate;
 	
 	// 회원번호, 회원 id, 회원명
 	private String memNo, memId, memName;
 	
 	// 평점
 	private double grade;
+	
 
 	public String getClassNo()
 	{
@@ -108,5 +109,36 @@ public class ReviewDTO
 	{
 		this.grade = grade;
 	}
+
+	public String getClassComNo()
+	{
+		return classComNo;
+	}
+
+	public void setClassComNo(String classComNo)
+	{
+		this.classComNo = classComNo;
+	}
+
+	public String getInsId()
+	{
+		return insId;
+	}
+
+	public void setInsId(String insId)
+	{
+		this.insId = insId;
+	}
+
+	public String getInsName()
+	{
+		return insName;
+	}
+
+	public void setInsName(String insName)
+	{
+		this.insName = insName;
+	}
+
 	
 }

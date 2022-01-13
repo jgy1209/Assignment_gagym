@@ -41,7 +41,7 @@
 		<div class="row">
 			<button class="btn btn-primary btn-xl text-uppercase col-md-4" onclick="location.href='myexerciseoneday.action'">나의 원데이클래스</button>
 			<div class="col-md-4"></div>
-			<button class="btn btn-primary btn-xl text-uppercase col-md-4">나의 수강예약</button>
+			<button class="btn btn-primary btn-xl text-uppercase col-md-4" onclick="location.href='myexerciseclass.action'">나의 수강예약</button>
 		</div>
 	</div>
 </div>
