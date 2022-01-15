@@ -42,7 +42,7 @@ tr, td{
 		// 게시글 이동
 		$(".classContent").click(function()
 		{
-			$(location).attr("href", "onedaycontent.action?classNo=" + $(this).children().val());
+			$(location).attr("href", "classcontent.action?classNo=" + $(this).children().val());
 		});
 		// 예약 취소창
 		$(".classCancelForm").click(function()

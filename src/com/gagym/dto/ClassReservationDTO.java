@@ -2,8 +2,8 @@ package com.gagym.dto;
 
 public class ClassReservationDTO
 {
-	// 강좌번호, 강좌제목, 강사명, 강사아이디, 회원번호
-	private String classNo, title, insName, insId, memNo;
+	// 강좌번호, 강좌제목, 강사명, 강사아이디, 회원번호, 카테고리
+	private String classNo, title, insName, insId, memNo, category;
 	
 	// 예약번호, 예약날짜, 취소일시, 취소사유, 완료일시, 처리날짜
 	private String classRsvNo, rsvDate, cnlDate, cnlReason, comDate, prcDate;
@@ -202,6 +202,16 @@ public class ClassReservationDTO
 	public void setClassComNo(String classComNo)
 	{
 		this.classComNo = classComNo;
+	}
+
+	public String getCategory()
+	{
+		return category;
+	}
+
+	public void setCategory(String category)
+	{
+		this.category = category;
 	}
 	
 }

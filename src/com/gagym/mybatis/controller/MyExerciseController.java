@@ -1,13 +1,16 @@
 package com.gagym.mybatis.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,9 +19,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.gagym.dto.ClassReservationDTO;
 import com.gagym.dto.DisputeDTO;
+import com.gagym.dto.InstructorScheduleDTO;
 import com.gagym.dto.OnedayDTO;
 import com.gagym.dto.ReviewDTO;
+import com.gagym.mybatis.inter.IInstructorDAO;
 import com.gagym.mybatis.inter.IMyExerciseClassDAO;
+import com.gagym.mybatis.inter.IMyExerciseMainDAO;
 import com.gagym.mybatis.inter.IMyExerciseOnedayDAO;
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
@@ -30,24 +36,117 @@ public class MyExerciseController
 	@Autowired
 	private SqlSession sqlSession;
 	
-	// 1. 나의 운동 메인 진입
+	// 1-1. 나의 운동 메인 진입
 	@RequestMapping(value = "/myexercise.action", method = RequestMethod.GET)
-	public String myExercise(HttpSession session, Model model)
+	public String myExercise(HttpServletRequest request, HttpSession session, Model model)
 	{		
 		String memNo = (String)session.getAttribute("memNo");
 		
-		if (memNo==null)
+		IMyExerciseMainDAO dao = sqlSession.getMapper(IMyExerciseMainDAO.class);
+		
+		try
 		{
+			if (memNo==null)
+			{
+				model.addAttribute("msg","로그인 후 이용가능합니다.");
+				model.addAttribute("url","login.action");
+				
+				return "/WEB-INF/myPageView/Alert.jsp";
+			}
 			
-			model.addAttribute("msg","로그인 후 이용가능합니다.");
-			model.addAttribute("url","login.action");
+			String yearStr = request.getParameter("year");
+			String monthStr = request.getParameter("month");
 			
-			return "/WEB-INF/myPageView/Alert.jsp";
+			int year = 0;
+			int month = 0;
+			
+			Calendar today = Calendar.getInstance();
+			
+			// 처음 진입시 오늘 날짜로 설정
+			if (yearStr == null && monthStr == null)
+			{
+				year = today.get(Calendar.YEAR);
+				month = today.get(Calendar.MONTH) + 1;
+			}
+			else
+			{
+				year = Integer.parseInt(yearStr);
+				month = Integer.parseInt(monthStr);
+			}
+			
+			// 1월 미만, 12월 초과는 다음 연도로 이동
+			if (month > 12)
+			{
+				year++;
+				month = 1;
+			}
+			
+			if (month < 1)
+			{
+				year--;
+				month = 12;
+			}
+			
+			String yearMonth = year + "-" + month;
+			
+			ArrayList<ClassReservationDTO> schedule = dao.scheduleBar(memNo, yearMonth);
+			
+			JSONArray arr = new JSONArray();
+			
+			// JSON으로 전달
+			for (ClassReservationDTO dto : schedule)
+			{
+				JSONObject obj = new JSONObject();
+				obj.put("category", dto.getCategory());
+				obj.put("rsvDate", dto.getRsvDate());
+				
+				arr.add(obj);
+			}
+			
+			model.addAttribute("json", arr.toJSONString());
+			
+			
+		} catch (Exception e)
+		{
+			System.out.println(e.toString());
 		}
+		
 		
 		return "/WEB-INF/myExerciseView/MyExerciseMain.jsp";
 		
 	}
+	
+	// 1-2. 스케줄 ajax
+	@RequestMapping(value = "/memscheduleajax.action", method = RequestMethod.GET)
+	public String ScheduleAjax(Model model, HttpServletRequest request)
+	{
+		IMyExerciseMainDAO dao = sqlSession.getMapper(IMyExerciseMainDAO.class);
+		
+		String memNo = request.getParameter("memNo");
+		String date = request.getParameter("date");
+		
+		model.addAttribute("scheduleClass", dao.classSchedule(memNo, date));
+		model.addAttribute("scheduleMission", dao.missionSchedule(memNo, date));
+		model.addAttribute("scheduleExelog", dao.exelogSchedule(memNo, date));
+		
+		return "/WEB-INF/myExerciseView/MemScheduleAjax.jsp";
+				
+	}
+	
+	// 1-3. 미션 완료 체크
+	@RequestMapping(value = "/missioncomplete.action", method = RequestMethod.GET)
+	public String missionComplete(Model model, String missionExeNo)
+	{
+		IMyExerciseMainDAO dao = sqlSession.getMapper(IMyExerciseMainDAO.class);
+		
+		dao.missionComplete(missionExeNo);
+		
+		return "redirect:myexercise.action";
+				
+	}
+	
+	// 1-4. 운동 일지 등록
+	
 	
 	
 	// 2. 나의 원데이클래스
